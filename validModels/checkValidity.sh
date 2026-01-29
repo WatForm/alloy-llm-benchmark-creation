@@ -12,7 +12,27 @@ base_dir=""
 
 mkdir -p "$VALID_DIR"
 
-check_file() {
+check_primed_vars() {
+    local file="$1"
+    
+    if grep -q \' "$file"; then
+        echo "  [FAIL] Contains primed variables (not compatible with Alloy 6)"
+        return 1
+    fi
+    return 0
+}
+
+check_single_file() {
+    local file="$1"
+    
+    if grep -E '^\s*open\s+' "$file" | grep -qv 'util/'; then
+        echo "  [FAIL] Contains open statements for non-util modules"
+        return 1
+    fi
+    return 0
+}
+
+check_alloy_diff_compatible() {
     local file="$1"
     
     echo "Checking: $file"
@@ -20,21 +40,45 @@ check_file() {
     output=$(java -cp "$JAR_PATH" org.alloytools.alloy.diff.ModuleDiff "$file" "$file" Equivalence 1 false sat4j 2>&1)
     
     if echo "$output" | grep -q "The two modules are equivalent."; then
-        echo "  ✓ Valid"
-        if [ -n "$base_dir" ]; then
-            rel_path="${file#$base_dir/}"
-        else
-            rel_path=$(basename "$file")
-        fi
-        
-        target_path="$VALID_DIR/$rel_path"
-        mkdir -p "$(dirname "$target_path")"
-        cp "$file" "$target_path"
-        ((valid_count++))
+        echo "  [PASS] Alloy-diff compatible"
+        return 0
     else
-        echo "  ✗ Invalid"
-        ((invalid_count++))
+        echo "  [FAIL] Not alloy-diff compatible"
+        return 1
     fi
+}
+
+check_file() {
+    local file="$1"
+    
+    # Run all checks
+    if ! check_primed_vars "$file"; then
+        ((invalid_count++))
+        return 1
+    fi
+    
+    if ! check_single_file "$file"; then
+        ((invalid_count++))
+        return 1
+    fi
+    
+    if ! check_alloy_diff_compatible "$file"; then
+        ((invalid_count++))
+        return 1
+    fi
+    
+    # All checks passed
+    echo "  [PASS] All checks passed"
+    if [ -n "$base_dir" ]; then
+        rel_path="${file#$base_dir/}"
+    else
+        rel_path=$(basename "$file")
+    fi
+    
+    target_path="$VALID_DIR/$rel_path"
+    mkdir -p "$(dirname "$target_path")"
+    cp "$file" "$target_path"
+    ((valid_count++))
 }
 
 process_directory() {
