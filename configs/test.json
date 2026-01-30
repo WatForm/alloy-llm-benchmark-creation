@@ -1,0 +1,12 @@
+{
+	"key":"./secret/key",
+	"alloy-english-prefix":"./prompts/alloy-english-prefix.txt",
+	"alloy-english-suffix":"./prompts/alloy-english-suffix.txt",
+	"english-alloy-prefix":"./prompts/english-alloy-prefix.txt",
+	"english-alloy-suffix":"./prompts/english-alloy-suffix.txt",
+	"input-folder":"pipeline-test/original-models",
+	"english-summary-folder":"pipeline-test/english-summaries",
+	"reconstruction-response-folder":"pipeline-test/reconstructed-responses",
+	"reconstruction-models-folder":"pipeline-test/reconstructed-models",
+	"script":"./scripts/openAI.py"
+}

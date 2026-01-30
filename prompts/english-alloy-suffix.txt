@@ -1,0 +1,1 @@
+Write an Alloy model that captures the specifications described above
