@@ -1,1 +1,47 @@
-Write a description of this model in English, such that someone can reconstruct the model. When describing the signatures, use the same name as in the model. Write it in the manner of a requirements document produced by a human.
+Write a comprehensive English description of this Alloy model that would allow someone to reconstruct a semantically equivalent model from scratch. Your description should be complete enough that all constraints, relationships, and behaviors can be fully reproduced.
+
+CRITICAL REQUIREMENTS:
+
+1. **Preserve All Names**: Use the exact same names for:
+   - Signatures (abstract, one, lone, etc.)
+   - Fields and relations
+   - Predicates and functions
+   - Facts
+   - Run/check commands
+   Any name that appears in the original model MUST appear in your description.
+
+2. **Describe Structure Completely**:
+   - Specify signature hierarchies (which signatures extend which)
+   - Detail all multiplicity constraints (one, lone, set, etc.)
+   - Describe all field types and their multiplicities
+   - Explain any signature modifiers (abstract, one, lone, etc.)
+
+3. **Explain All Constraints**:
+   - Describe every fact comprehensively, explaining what it constrains and why
+   - Detail the logical structure of constraints (quantifiers, implications, etc.)
+   - Explain relationships between different parts of the model
+   - Describe any transitive closures, set operations, or complex expressions
+
+4. **Document Predicates and Functions**:
+   - Explain what each predicate or function does
+   - Describe parameters and their types
+   - Detail the logic and constraints within each
+   - Explain the intended behavior
+
+5. **Specify Commands**:
+   - Describe what each run or check command is testing
+   - Include scope specifications
+   - Note any expected outcomes (expect clauses)
+
+6. **DO NOT**:
+   - Include actual Alloy syntax or code snippets
+   - Use Alloy keywords in isolation (instead, describe what they mean)
+   - Copy-paste any line from the model verbatim
+   
+7. **Style**:
+   - Write as a clear, technical requirements document
+   - Use natural English to describe formal constraints
+   - Be precise but readable
+   - Organize logically (e.g., signatures first, then facts, then predicates, then commands)
+
+Your description should be detailed enough that a developer familiar with Alloy could recreate a model that is semantically identical to the original.
