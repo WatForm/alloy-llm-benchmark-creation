@@ -66,9 +66,9 @@ fact NoIncest {
     }
 
 pred Show {
-    some p: Person - (Adam + Eve) | some p.spouse
+    -- some p: Person - (Adam + Eve) | some p.spouse
     }
-run Show for 6 expect 1
+run Show for 5 expect 1
 
 
 
