@@ -10,7 +10,7 @@ def main():
     # Check if all three arguments are provided
     if len(sys.argv) != 4:
         print("Usage: python master.py <string_arg> <source_folder> <destination_folder>")
-        print("Example: python master.py test /path/to/source /path/to/dest")
+        print("Example: python master.py openAI /path/to/source-folder /path/to/dest-folder")
         sys.exit(1)
     
     arg1 = sys.argv[1]

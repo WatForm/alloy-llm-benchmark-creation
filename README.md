@@ -16,9 +16,19 @@ Execute the following after cloning the repo:
 python -m venv .env  
 source ./.env/bin/activate             
 pip install openai
+pip install ollama
 ```
 
 This creates a virtual environment and sets up the openai packages. The commands are different on a Windows system.
+
+# Quick start
+
+run the following command:
+
+```
+python ./scripts/master.py openAI ./sample-set ./sample-set-english
+```
+This recursively traverses over all the `.als` files in sample-set, and produces english summaries in sample-set-english, using openAI.
 
 # Temp:
 
