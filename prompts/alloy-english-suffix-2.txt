@@ -3,7 +3,7 @@ Write a natural English description of this Alloy model that captures all the in
 Requirements:
 
 - Use the exact names from the model (signatures, fields) - don't rename anything
-- Describe what types exist, how they relate, and what constraints apply
+- Describe what sets and relations exist, how they relate, and what constraints apply
 - State constraints as simple facts, not as instructions (e.g., just say "X cannot be Y", not "create a fact that X cannot be Y")
 - Don't explain HOW to implement constraints or WHY they exist - just state WHAT is constrained
 - Be explicit about relationships - don't assume meaning from names (e.g., if "parent" relates to "ancestor", state that relationship explicitly)
