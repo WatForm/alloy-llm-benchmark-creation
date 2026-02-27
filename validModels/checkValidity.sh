@@ -4,6 +4,9 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 JAR_PATH="$SCRIPT_DIR/jars/alloy-diff.jar"
+COMPOSAT_JAR="$SCRIPT_DIR/jars/CompoSAT.jar"
+JAVA8="/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home/bin/java"
+COMPOSAT_TMPDIR="/private/tmp/amalgam-coverage"
 VALID_DIR="$SCRIPT_DIR/validModels"
 
 valid_count=0
@@ -11,6 +14,7 @@ invalid_count=0
 base_dir=""
 
 mkdir -p "$VALID_DIR"
+mkdir -p "$COMPOSAT_TMPDIR"
 
 check_primed_vars() {
     local file="$1"
@@ -48,6 +52,34 @@ check_alloy_diff_compatible() {
     fi
 }
 
+check_composat_compatible() {
+    local file="$1"
+    
+    # Create a temp copy with run/check commands stripped and "run {} for 1" appended
+    local tmpdir
+    tmpdir=$(mktemp -d /tmp/composat_check_XXXXXXXX)
+    sed -E '/^[[:space:]]*(run|check)[[:space:]]/d' "$file" > "$tmpdir/test.als"
+    echo "run {} for 1" >> "$tmpdir/test.als"
+    
+    output=$("$JAVA8" -Djava.io.tmpdir="$COMPOSAT_TMPDIR" \
+        -jar "$COMPOSAT_JAR" batch \
+        --files "$tmpdir/test.als" \
+        --command 0 \
+        --mode coverage \
+        --symmetry 2000 \
+        --out "$tmpdir/out" 2>&1)
+    
+    rm -rf "$tmpdir"
+    
+    if echo "$output" | grep -q "Error"; then
+        echo "  [FAIL] Not CompoSAT compatible"
+        return 1
+    else
+        echo "  [PASS] CompoSAT compatible"
+        return 0
+    fi
+}
+
 check_file() {
     local file="$1"
     
@@ -63,6 +95,11 @@ check_file() {
     fi
     
     if ! check_alloy_diff_compatible "$file"; then
+        ((invalid_count++))
+        return 1
+    fi
+    
+    if ! check_composat_compatible "$file"; then
         ((invalid_count++))
         return 1
     fi

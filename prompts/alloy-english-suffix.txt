@@ -1,47 +1,19 @@
-Write a comprehensive English description of this Alloy model that would allow someone to reconstruct a semantically equivalent model from scratch. Your description should be complete enough that all constraints, relationships, and behaviors can be fully reproduced.
 
-CRITICAL REQUIREMENTS:
 
-1. **Preserve All Names**: Use the exact same names for:
-   - Signatures (abstract, one, lone, etc.)
-   - Fields and relations
-   - Predicates and functions
-   - Facts
-   - Run/check commands
-   Any name that appears in the original model MUST appear in your description.
+Write a natural English description of this Alloy model that captures all the information needed to reconstruct a semantically equivalent model.
 
-2. **Describe Structure Completely**:
-   - Specify signature hierarchies (which signatures extend which)
-   - Detail all multiplicity constraints (one, lone, set, etc.)
-   - Describe all field types and their multiplicities
-   - Explain any signature modifiers (abstract, one, lone, etc.)
+Requirements:
 
-3. **Explain All Constraints**:
-   - Describe every fact comprehensively, explaining what it constrains and why
-   - Detail the logical structure of constraints (quantifiers, implications, etc.)
-   - Explain relationships between different parts of the model
-   - Describe any transitive closures, set operations, or complex expressions
+- Use the exact names from the model (signatures, fields) - don't rename anything
+- Describe what sets and relations exist, how they relate, and what constraints apply
+- State constraints as simple facts, not as instructions (e.g., just say "X cannot be Y", not "create a fact that X cannot be Y")
+- Don't explain HOW to implement constraints or WHY they exist - just state WHAT is constrained
+- Be explicit about relationships - don't assume meaning from names (e.g., if "parent" relates to "ancestor", state that relationship explicitly)
+- Include all multiplicity constraints, quantifiers, and logical conditions
+- Describe predicates and commands: their names, what they check/specify, and any scope or expected results
 
-4. **Document Predicates and Functions**:
-   - Explain what each predicate or function does
-   - Describe parameters and their types
-   - Detail the logic and constraints within each
-   - Explain the intended behavior
-
-5. **Specify Commands**:
-   - Describe what each run or check command is testing
-   - Include scope specifications
-   - Note any expected outcomes (expect clauses)
-
-6. **DO NOT**:
-   - Include actual Alloy syntax or code snippets
-   - Use Alloy keywords in isolation (instead, describe what they mean)
-   - Copy-paste any line from the model verbatim
-   
-7. **Style**:
-   - Write as a clear, technical requirements document
-   - Use natural English to describe formal constraints
-   - Be precise but readable
-   - Organize logically (e.g., signatures first, then facts, then predicates, then commands)
-
-Your description should be detailed enough that a developer familiar with Alloy could recreate a model that is semantically identical to the original.
+DON'T:
+- Include Alloy syntax or code
+- Prescribe how to organize the model
+- Explain implementation details
+- Add explanations beyond stating the constraints themselves

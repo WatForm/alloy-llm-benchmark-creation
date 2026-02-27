@@ -8,3 +8,6 @@ Following checks are required:
     - TODO: Determine how to run from command line
     - TODO: Fix: `/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home/bin/java -Djava.io.tmpdir=/private/tmp/amalgam-coverage -jar validModels/jars/CompoSAT.jar batch --files sample-set/genealogy.als --command 0 --mode coverage --symmetry 2000 --out sample-set/instances/`
     - TODO: Remove the existing command, use run {} for x. Increment x=1,..., until some (reasonable) time limit - write script for this2
+
+generating instances:
+python scripts/master.py openAI trial-run/models trial-run/descriptions/

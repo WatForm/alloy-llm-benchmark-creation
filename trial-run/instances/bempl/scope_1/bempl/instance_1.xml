@@ -1,0 +1,90 @@
+<alloy builddate="unknown">
+
+
+<bounds> 
+<upperbound name="Int/next"  arity="2">
+</upperbound>
+<upperbound name="seq/Int"  arity="1">
+</upperbound>
+<upperbound name="String"  arity="1">
+</upperbound>
+<upperbound name="this/secure_lab"  arity="1">
+   <tuple> <atom label="secure_lab$0"/> </tuple>
+</upperbound>
+<upperbound name="this/Room"  arity="1">
+   <tuple> <atom label="secure_lab$0"/> </tuple>
+</upperbound>
+<upperbound name="this/Employee"  arity="1">
+   <tuple> <atom label="Employee$0"/> </tuple>
+</upperbound>
+<upperbound name="this/Researcher"  arity="1">
+   <tuple> <atom label="Employee$0"/> </tuple>
+</upperbound>
+<upperbound name="this/Person"  arity="1">
+   <tuple> <atom label="Employee$0"/> </tuple>
+</upperbound>
+<upperbound name="this/Person.owns"  arity="2">
+   <tuple> <atom label="Employee$0"/> <atom label="Key$0"/> </tuple>
+</upperbound>
+<upperbound name="this/Key"  arity="1">
+   <tuple> <atom label="Key$0"/> </tuple>
+</upperbound>
+<upperbound name="this/Key.authorized"  arity="2">
+   <tuple> <atom label="Key$0"/> <atom label="Employee$0"/> </tuple>
+</upperbound>
+<upperbound name="this/Key.opened_by"  arity="2">
+   <tuple> <atom label="Key$0"/> <atom label="secure_lab$0"/> </tuple>
+</upperbound>
+</bounds><instance bitwidth="0" maxseq="0" command="Run run$1 for 1" filename="">
+
+<sig label="seq/Int" ID="0" parentID="1" builtin="yes">
+</sig>
+
+<sig label="Int" ID="1" parentID="2" builtin="yes">
+</sig>
+
+<sig label="String" ID="3" parentID="2" builtin="yes">
+</sig>
+
+<sig label="this/secure_lab" ID="4" parentID="5" one="yes">
+   <atom label="secure_lab$0"/>
+</sig>
+
+<sig label="this/Room" ID="5" parentID="2">
+</sig>
+
+<sig label="this/Employee" ID="6" parentID="7">
+   <atom label="Employee$0"/>
+</sig>
+
+<sig label="this/Researcher" ID="8" parentID="7">
+</sig>
+
+<sig label="this/Person" ID="7" parentID="2" abstract="yes">
+</sig>
+
+<field label="owns" ID="9" parentID="7">
+   <tuple> <atom label="Employee$0"/> <atom label="Key$0"/> </tuple>
+   <types> <type ID="7"/> <type ID="10"/> </types>
+</field>
+
+<sig label="this/Key" ID="10" parentID="2">
+   <atom label="Key$0"/>
+</sig>
+
+<field label="authorized" ID="11" parentID="10">
+   <tuple> <atom label="Key$0"/> <atom label="Employee$0"/> </tuple>
+   <types> <type ID="10"/> <type ID="6"/> </types>
+</field>
+
+<field label="opened_by" ID="12" parentID="10">
+   <tuple> <atom label="Key$0"/> <atom label="secure_lab$0"/> </tuple>
+   <types> <type ID="10"/> <type ID="5"/> </types>
+</field>
+
+<sig label="univ" ID="2" builtin="yes">
+</sig>
+
+</instance>
+
+</alloy>
