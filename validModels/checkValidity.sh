@@ -5,8 +5,11 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 JAR_PATH="$SCRIPT_DIR/jars/alloy-diff.jar"
 COMPOSAT_JAR="$SCRIPT_DIR/jars/CompoSAT.jar"
-JAVA8="/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home/bin/java"
-COMPOSAT_TMPDIR="/private/tmp/amalgam-coverage"
+source "$SCRIPT_DIR/../scripts/java-common.sh"
+
+JAVA17="$(require_java_for_version 17 "alloy-diff")" || exit 1
+JAVA8="$(require_java_for_version 8 "CompoSAT")" || exit 1
+COMPOSAT_TMPDIR="$(resolve_alloy_tmpdir)"
 VALID_DIR="$SCRIPT_DIR/validModels"
 
 valid_count=0
@@ -41,7 +44,7 @@ check_alloy_diff_compatible() {
     
     echo "Checking: $file"
     
-    output=$(java -cp "$JAR_PATH" org.alloytools.alloy.diff.ModuleDiff "$file" "$file" Equivalence 1 false sat4j 2>&1)
+    output=$("$JAVA17" -cp "$JAR_PATH" org.alloytools.alloy.diff.ModuleDiff "$file" "$file" Equivalence 1 false sat4j 2>&1)
     
     if echo "$output" | grep -q "The two modules are equivalent."; then
         echo "  [PASS] Alloy-diff compatible"

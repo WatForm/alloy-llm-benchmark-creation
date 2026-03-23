@@ -14,13 +14,16 @@ def main():
     with open("./secret/key", "r") as f:
         key = f.read()
 
-    # Read prompt from input file
-    try:
-        with open(input_file, "r") as f:
-            prompt = f.read()
-    except FileNotFoundError:
-        print(f"Error: Input file '{input_file}' not found")
-        sys.exit(1)
+    # Read prompt from stdin when input_file is '-', otherwise read from file.
+    if input_file == "-":
+        prompt = sys.stdin.read()
+    else:
+        try:
+            with open(input_file, "r") as f:
+                prompt = f.read()
+        except FileNotFoundError:
+            print(f"Error: Input file '{input_file}' not found")
+            sys.exit(1)
 
     # Initialize OpenAI client
     client = OpenAI(api_key=key)

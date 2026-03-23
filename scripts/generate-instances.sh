@@ -13,21 +13,56 @@
 #   ./scripts/generate-instances.sh model.als trial-run/instances/ 120
 #   ./scripts/generate-instances.sh trial-run/models/ trial-run/instances/ 120 4
 
-JAVA8="/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home/bin/java"
-COMPOSAT_JAR="validModels/jars/CompoSAT.jar"
-COMPOSAT_TMPDIR="/private/tmp/amalgam-coverage"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+COMPOSAT_JAR="$REPO_ROOT/validModels/jars/CompoSAT.jar"
+
+source "$SCRIPT_DIR/java-common.sh"
+
+JAVA8="$(require_java_for_version 8 "CompoSAT")" || exit 1
+COMPOSAT_TMPDIR="$(resolve_alloy_tmpdir)"
+
+if [ ! -f "$COMPOSAT_JAR" ]; then
+    echo "Error: CompoSAT jar not found at '$COMPOSAT_JAR'"
+    exit 1
+fi
 
 # Ensure temp directory exists for CompoSAT
 mkdir -p "$COMPOSAT_TMPDIR"
+
+# Track directory-mode worker PIDs so Ctrl+C can stop all active work.
+RUNNING_JOBS=()
+
+cleanup_running_jobs() {
+    if [ ${#RUNNING_JOBS[@]} -gt 0 ]; then
+        kill "${RUNNING_JOBS[@]}" 2>/dev/null || true
+        wait "${RUNNING_JOBS[@]}" 2>/dev/null || true
+    fi
+}
+
+handle_interrupt() {
+    echo ""
+    echo "Interrupt received. Stopping active instance generation jobs..."
+    cleanup_running_jobs
+    exit 130
+}
+
+trap handle_interrupt INT TERM
 
 # --- Process a single .als file ---
 process_single_file() {
     local INPUT_FILE="$1"
     local OUTPUT_DIR="$2"
     local TIME_LIMIT="$3"
+    local INPUT_ROOT="$4"
 
     local MODEL_NAME
     MODEL_NAME=$(basename "$INPUT_FILE" .als)
+    local MODEL_REL_PATH="$MODEL_NAME"
+    if [ -n "$INPUT_ROOT" ]; then
+        local REL_PATH="${INPUT_FILE#$INPUT_ROOT/}"
+        MODEL_REL_PATH="${REL_PATH%.als}"
+    fi
     local TEMP_DIR
     TEMP_DIR=$(mktemp -d /tmp/composat_XXXXXXXX)
     local TEMP_FILE="$TEMP_DIR/${MODEL_NAME}.als"
@@ -35,7 +70,7 @@ process_single_file() {
     # Remove lines that are run or check commands
     sed -E '/^[[:space:]]*(run|check)[[:space:]]/d' "$INPUT_FILE" > "$TEMP_FILE"
 
-    echo "[$MODEL_NAME] Starting (time limit: ${TIME_LIMIT}s)"
+    echo "[$MODEL_REL_PATH] Starting (time limit: ${TIME_LIMIT}s)"
 
     mkdir -p "$OUTPUT_DIR"
 
@@ -55,14 +90,16 @@ process_single_file() {
 
         local REMAINING=$((TIME_LIMIT - ELAPSED))
 
-        # Update the temp file: remove any previous "run {} for" line, append new one
-        sed -i '' '/^run {} for [0-9]/d' "$TEMP_FILE"
+        # Update the temp file: remove any previous generated run line, append new one.
+        local REWRITE_FILE="$TEMP_DIR/rewrite_${SCOPE}.als"
+        sed -E '/^run \{\} for [0-9]+$/d' "$TEMP_FILE" > "$REWRITE_FILE"
+        mv "$REWRITE_FILE" "$TEMP_FILE"
         echo "run {} for $SCOPE" >> "$TEMP_FILE"
 
-        echo "[$MODEL_NAME] Scope $SCOPE (${ELAPSED}s elapsed, ${REMAINING}s remaining)"
+        echo "[$MODEL_REL_PATH] Scope $SCOPE (${ELAPSED}s elapsed, ${REMAINING}s remaining)"
 
-        # Output structure: <output-dir>/<model-name>/scope_N/
-        local SCOPE_OUT="$OUTPUT_DIR/$MODEL_NAME/scope_$SCOPE"
+        # Output structure: <output-dir>/<model-relative-path>/scope_N/
+        local SCOPE_OUT="$OUTPUT_DIR/$MODEL_REL_PATH/scope_$SCOPE"
         mkdir -p "$SCOPE_OUT"
 
         # Run CompoSAT directly in background (no pipe, so $! is the Java PID)
@@ -83,7 +120,7 @@ process_single_file() {
             CURRENT_TIME=$(date +%s)
             ELAPSED=$((CURRENT_TIME - START_TIME))
             if [ "$ELAPSED" -ge "$TIME_LIMIT" ]; then
-                echo "[$MODEL_NAME] Time limit during scope $SCOPE. Killing..."
+                echo "[$MODEL_REL_PATH] Time limit during scope $SCOPE. Killing..."
                 kill "$COMPOSAT_PID" 2>/dev/null
                 wait "$COMPOSAT_PID" 2>/dev/null
                 rm -rf "$SCOPE_OUT"
@@ -95,7 +132,7 @@ process_single_file() {
         wait "$COMPOSAT_PID" 2>/dev/null
 
         if [ "$TIMED_OUT" = true ]; then
-            echo "[$MODEL_NAME] Time limit reached (${ELAPSED}s >= ${TIME_LIMIT}s). Stopping."
+            echo "[$MODEL_REL_PATH] Time limit reached (${ELAPSED}s >= ${TIME_LIMIT}s). Stopping."
             break
         fi
 
@@ -103,7 +140,7 @@ process_single_file() {
         local SCOPE_INSTANCES
         SCOPE_INSTANCES=$(find "$SCOPE_OUT" -name "*.xml" 2>/dev/null | wc -l | tr -d ' ')
         TOTAL_INSTANCES=$((TOTAL_INSTANCES + SCOPE_INSTANCES))
-        echo "[$MODEL_NAME]   -> $SCOPE_INSTANCES instance(s) at scope $SCOPE"
+        echo "[$MODEL_REL_PATH]   -> $SCOPE_INSTANCES instance(s) at scope $SCOPE"
 
         # Clean up empty scope dirs
         if [ "$SCOPE_INSTANCES" -eq 0 ]; then
@@ -118,7 +155,7 @@ process_single_file() {
     local END_TIME
     END_TIME=$(date +%s)
     local TOTAL_TIME=$((END_TIME - START_TIME))
-    echo "[$MODEL_NAME] Done. ${TOTAL_TIME}s, max scope $((SCOPE - 1)), $TOTAL_INSTANCES instance(s)"
+    echo "[$MODEL_REL_PATH] Done. ${TOTAL_TIME}s, max scope $((SCOPE - 1)), $TOTAL_INSTANCES instance(s)"
 }
 
 # Export function and variables so subprocesses can use them
@@ -149,7 +186,7 @@ mkdir -p "$OUTPUT_DIR"
 
 if [ -f "$INPUT" ]; then
     # Single file mode
-    process_single_file "$INPUT" "$OUTPUT_DIR" "$TIME_LIMIT"
+    process_single_file "$INPUT" "$OUTPUT_DIR" "$TIME_LIMIT" ""
 elif [ -d "$INPUT" ]; then
     # Directory mode — find all .als files and run in parallel
     ALS_FILES=()
@@ -175,22 +212,32 @@ elif [ -d "$INPUT" ]; then
     for f in "${ALS_FILES[@]}"; do
         # Wait if we've hit the parallelism limit
         while true; do
-            RUNNING_JOBS=$(jobs -rp | wc -l | tr -d ' ')
-            if [ "$RUNNING_JOBS" -lt "$MAX_PARALLEL" ]; then
+            RUNNING_COUNT=$(jobs -rp | wc -l | tr -d ' ')
+            if [ "$RUNNING_COUNT" -lt "$MAX_PARALLEL" ]; then
                 break
             fi
             sleep 1
         done
 
-        process_single_file "$f" "$OUTPUT_DIR" "$TIME_LIMIT" &
+        process_single_file "$f" "$OUTPUT_DIR" "$TIME_LIMIT" "$INPUT" &
+        RUNNING_JOBS+=("$!")
     done
 
     # Wait for all remaining background jobs
-    wait
+    any_failed=0
+    for pid in "${RUNNING_JOBS[@]}"; do
+        if ! wait "$pid"; then
+            any_failed=1
+        fi
+    done
+    RUNNING_JOBS=()
 
     echo ""
     TOTAL_INSTANCES=$(find "$OUTPUT_DIR" -name "*.xml" 2>/dev/null | wc -l | tr -d ' ')
     echo "=== All done. $TOTAL_INSTANCES total instance(s) generated across $FILE_COUNT file(s) ==="
+    if [ "$any_failed" -ne 0 ]; then
+        exit 1
+    fi
 else
     echo "Error: '$INPUT' is neither a file nor a directory."
     exit 1

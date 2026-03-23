@@ -23,11 +23,16 @@ def main():
         with open(suffix_file, 'r') as f:
             suffix = f.read()
         
-        # Write concatenated result
-        with open(output_file, 'w') as f:
-            f.write(prefix + content + suffix)
-        
-        print(f"Created: {output_file}")
+        full_prompt = prefix + content + suffix
+
+        if output_file == '-':
+            # Stream prompt to stdout so callers can pipe directly to an API script.
+            sys.stdout.write(full_prompt)
+        else:
+            with open(output_file, 'w') as f:
+                f.write(full_prompt)
+
+            print(f"Created: {output_file}")
         
     except FileNotFoundError as e:
         print(f"Error: File not found - {e.filename}")
