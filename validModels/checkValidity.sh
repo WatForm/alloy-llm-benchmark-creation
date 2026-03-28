@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Usage: ./checkValidity.sh file/dir
+# Usage: ./checkValidity.sh file/dir [max-parallel]
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 JAR_PATH="$SCRIPT_DIR/jars/alloy-diff.jar"
@@ -14,7 +14,7 @@ VALID_DIR="$SCRIPT_DIR/validModels"
 
 valid_count=0
 invalid_count=0
-base_dir=""
+DEFAULT_MAX_PARALLEL=4
 
 mkdir -p "$VALID_DIR"
 mkdir -p "$COMPOSAT_TMPDIR"
@@ -85,32 +85,29 @@ check_composat_compatible() {
 
 check_file() {
     local file="$1"
+    local input_root="$2"
     
     # Run all checks
     if ! check_primed_vars "$file"; then
-        ((invalid_count++))
         return 1
     fi
     
     if ! check_single_file "$file"; then
-        ((invalid_count++))
         return 1
     fi
     
     if ! check_alloy_diff_compatible "$file"; then
-        ((invalid_count++))
         return 1
     fi
     
     if ! check_composat_compatible "$file"; then
-        ((invalid_count++))
         return 1
     fi
     
     # All checks passed
     echo "  [PASS] All checks passed"
-    if [ -n "$base_dir" ]; then
-        rel_path="${file#$base_dir/}"
+    if [ -n "$input_root" ]; then
+        rel_path="${file#$input_root/}"
     else
         rel_path=$(basename "$file")
     fi
@@ -118,24 +115,74 @@ check_file() {
     target_path="$VALID_DIR/$rel_path"
     mkdir -p "$(dirname "$target_path")"
     cp "$file" "$target_path"
-    ((valid_count++))
+    return 0
 }
 
 process_directory() {
     local dir="$1"
-    base_dir="$dir"
-    
+    local max_parallel="$2"
+    local results_tmp
+    local file
+    local result_file
+    local running
+    local file_count=0
+    local -a pids=()
+    local -a result_files=()
+
+    results_tmp=$(mktemp -d /tmp/checkvalidity_results_XXXXXXXX)
+
+    echo "Directory mode: checking with up to $max_parallel parallel worker(s)"
+
     while IFS= read -r -d '' file; do
-        check_file "$file"
+        ((file_count++))
+        result_file="$results_tmp/result_${file_count}.txt"
+        result_files+=("$result_file")
+
+        while true; do
+            running=$(jobs -rp | wc -l | tr -d ' ')
+            if [ "$running" -lt "$max_parallel" ]; then
+                break
+            fi
+            sleep 0.2
+        done
+
+        (
+            if check_file "$file" "$dir"; then
+                echo "PASS" > "$result_file"
+            else
+                echo "FAIL" > "$result_file"
+            fi
+        ) &
+        pids+=("$!")
     done < <(find "$dir" -type f -name "*.als" -print0)
+
+    for pid in "${pids[@]}"; do
+        wait "$pid" 2>/dev/null || true
+    done
+
+    for result_file in "${result_files[@]}"; do
+        if [ -f "$result_file" ] && grep -qx "PASS" "$result_file"; then
+            ((valid_count++))
+        else
+            ((invalid_count++))
+        fi
+    done
+
+    rm -rf "$results_tmp"
 }
 
-if [ $# -ne 1 ]; then
-    echo "Usage: $0 <file|directory>"
+if [ $# -lt 1 ] || [ $# -gt 2 ]; then
+    echo "Usage: $0 <file|directory> [max-parallel]"
     exit 1
 fi
 
 input="$1"
+max_parallel="${2:-$DEFAULT_MAX_PARALLEL}"
+
+if ! [[ "$max_parallel" =~ ^[0-9]+$ ]] || [ "$max_parallel" -lt 1 ]; then
+    echo "Error: max-parallel must be a positive integer"
+    exit 1
+fi
 
 if [ ! -e "$input" ]; then
     echo "Error: '$input' does not exist"
@@ -150,14 +197,18 @@ echo ""
 if [ -f "$input" ]; then
     # Single file
     if [[ "$input" == *.als ]]; then
-        check_file "$input"
+        if check_file "$input" ""; then
+            ((valid_count++))
+        else
+            ((invalid_count++))
+        fi
     else
         echo "Error: '$input' is not an .als file"
         exit 1
     fi
 elif [ -d "$input" ]; then
     # Directory
-    process_directory "$input"
+    process_directory "$input" "$max_parallel"
 else
     echo "Error: '$input' is neither a file nor a directory"
     exit 1

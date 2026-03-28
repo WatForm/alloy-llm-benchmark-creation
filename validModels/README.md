@@ -26,3 +26,22 @@ Bucket 50-59 lines (33 files):
 Bucket 60-69 lines (5 files):
 
 Investigate if ringerts method should be ran over multiple scopes (no monotonicity property)
+
+- Clean up models (different versions) - get original sources for all of them
+- Run ringerts method n->1 scope (in scoring script)
+- Making scoring script a bit more modular (weighting for two parts of ringers, weighting for composat, weighting per row, average to get total score). If syntax error, gets 0, otherwise score from above.
+- Clean up the directory structure of instances (duplicate model names) - or just make directory of models flat with naming.
+- Different java versions - how to handle cleanly?
+- general refactoring throughout
+- nix?
+- jenv? - how to handle the different java versions
+- she has instructions at the top of her java file
+
+
+export JAVA_HOME_17="/opt/homebrew/Cellar/openjdk@17/17.0.15/libexec/openjdk.jdk/Contents/Home"
+export JAVA_HOME_8="/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home"
+
+model sources:
+https://github.com/wenxiwang/iAlloy-dataset
+https://github.com/AlloyTools/models
+https://sites.google.com/view/platinum-repository
