@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<alloy>
+
+<view nodetheme="Martha" edgetheme="Martha">
+
+<defaultnode/>
+
+<defaultedge/>
+
+<node>
+   <type name="CandidateMsg"/>
+   <type name="ElectedMsg"/>
+   <type name="Int"/>
+   <type name="Node"/>
+   <type name="String"/>
+   <type name="univ"/>
+   <type name="seq/Int"/>
+</node>
+
+<node hideunconnected="yes" shape="Parallelogram" color="Gray">
+   <type name="Message"/>
+</node>
+
+<node showlabel="no">
+   <set name="$book_instance19_m0" type="Message"/>
+   <set name="$book_instance19_m1" type="Message"/>
+   <set name="$book_instance19_m2" type="Message"/>
+   <set name="$book_instance19_m3" type="Message"/>
+   <set name="$book_instance19_m4" type="Message"/>
+   <set name="$book_instance19_m5" type="Message"/>
+   <set name="$book_instance19_n0" type="Node"/>
+   <set name="$book_instance19_n1" type="Node"/>
+   <set name="$book_instance19_n2" type="Node"/>
+   <set name="first" type="Node"/>
+   <set name="last" type="Node"/>
+</node>
+
+<edge style="inherit">
+   <relation name="inbox"> <type name="Node"/> <type name="Message"/> </relation>
+</edge>
+
+<edge visible="no">
+   <relation name="$initiate_m"> <type name="Node"/> <type name="CandidateMsg"/> </relation>
+</edge>
+
+<edge visible="no" attribute="yes">
+   <relation name="payload"> <type name="Message"/> <type name="Node"/> </relation>
+</edge>
+
+</view>
+
+</alloy>

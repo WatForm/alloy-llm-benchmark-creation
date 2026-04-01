@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<alloy>
+
+<view nodetheme="Martha" edgetheme="Martha" hideSkolem="yes">
+
+<defaultnode/>
+
+<defaultedge/>
+
+<node>
+   <type name="File"/>
+   <type name="Int"/>
+   <type name="String"/>
+   <type name="univ"/>
+   <type name="seq/Int"/>
+   <set name="$book_example3_o0" type="univ"/>
+   <set name="$book_example3_o1" type="univ"/>
+   <set name="$book_example3_o2" type="univ"/>
+   <set name="$book_example3_o3" type="univ"/>
+   <set name="$book_example3_o4" type="univ"/>
+   <set name="$book_example3_o5" type="univ"/>
+   <set name="$book_example3_o6" type="univ"/>
+</node>
+
+<node color="Red">
+   <type name="Object"/>
+</node>
+
+<node shape="House">
+   <type name="Root"/>
+</node>
+
+<node shape="Trapezoid">
+   <type name="Dir"/>
+</node>
+
+<node visible="no" hideunconnected="no">
+   <type name="Name"/>
+</node>
+
+</view>
+
+</alloy>
