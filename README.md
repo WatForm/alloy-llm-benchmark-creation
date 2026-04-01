@@ -109,3 +109,34 @@ Arguments:
 3. time limit in seconds per model (default `120`)
 4. max parallel jobs in directory mode (default `4`)
 
+## 7) Generate exact-scope general instances (new)
+
+This step uses `scripts/InstanceGenerator.java` and runs exact scopes for top-level signatures.
+
+Default command (uses `x=10`, `y=5`):
+
+```bash
+./scripts/generate-general-instances.sh
+```
+
+Explicit command (same defaults shown):
+
+```bash
+./scripts/generate-general-instances.sh ./benchmark/models ./benchmark/generalInstances 10 5
+```
+
+Arguments:
+1. models directory (default `./benchmark/models`)
+2. output directory (default `./benchmark/generalInstances`)
+3. `x`: max instances kept per scope (default `10`)
+4. `y`: max scope, runs `1..y` (default `5`)
+5. timeout in seconds per model/scope run (optional, default `45`)
+
+Notes:
+1. Traverses all `.als` files recursively under the models directory.
+2. For each model and each scope from `1` to `y`, keeps up to `x` xml instances.
+3. If fewer than `x` satisfiable instances exist at a scope, it keeps however many exist.
+4. Output layout is: `benchmark/generalInstances/<model-relative-path>/scope_<n>/`.
+5. Random selection uses a larger candidate pool per scope, then samples down to `x`.
+6. Candidate pool size defaults to `3*x`; override with `CANDIDATE_MULTIPLIER`.
+
