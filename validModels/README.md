@@ -49,7 +49,8 @@ https://github.com/practicalalloy/models
 https://github.com/elkel53930/software_abstructions
 https://github.com/cturle/alloy.git
 https://github.com/Allisonius/AlloyModelsForEvaluations.git
-
+https://github.com/kaiyuanw/MuAlloy
+https://github.com/BrettKriz/Alloy
 
 
 Overall Funnel

@@ -1,0 +1,121 @@
+
+abstract sig Class{}
+one sig a,b,c,d,e,f,g,h,i,j in Class{}
+
+abstract sig Name{}
+one sig Bill, John, Sara, Mary in Name{}
+
+
+abstract sig Sched{
+	name: one Name,
+	classs: some Class
+}
+
+//fact f1 {some x:Name|x in 
+
+one sig Bills extends Sched{
+	name: one Bill,
+	class: (a+b+c)
+}
+one sig Saras extends Sched{
+	name: one Sara,
+	class: (d+e)
+}
+one sig Johns extends Sched{
+	name: one John,
+	class: (f+g+h+i)
+}
+one sig Marys extends Sched{
+	name: one Mary,
+	class: (d+g+c+j)
+}
+
+fun show : z {
+	z = ^(Bills+Saras+Johns+Marys)
+}
+run show
+
+
+
+abstract sig CL{}
+one sig CL1 extends CL{
+	class: (a+b+c)
+}
+one sig CL2 extends CL{
+	class: (d+e)
+}
+one sig CL3 extends CL{
+	class: (f+g+h+i)
+}
+one sig CL4 extends CL{
+	class: (d+g+c+j)
+}
+
+
+fact{
+	
+	classes = Bill->(a+b+c) 
+	+ Sara->(d+e) 
+	+ John->(f+g+h+i)
+ 	+ Mary->(d+g+c+j)
+}
+
+	texture = Sample1->Caked + Sample2->Flaky + Sample3->Fluffy + Sample4->Caked
+	color = Sample1->Dark + Sample2->Gray + Sample3->Pale + Sample4->Pale
+	particles = Sample1->FALSE + Sample2->FALSE + Sample3->FALSE + Sample4->TRUE
+	nicotine = Sample1->Two + Sample2->Two + Sample3->Two + Sample4->One
+
+one sig Bill extends Student{
+	enrolls: E1,E2,E3
+}
+one sig Sara extends Student{
+	enrolls: E4,E5
+}
+one sig John extends Student{
+	enrolls: E6,E7,E8,E9
+}
+one sig Mary extends Student{
+	enrolls: E10,E11,E12,E13
+}
+
+=======================
+
+
+abstract sig Class{
+	takers: lone Enroll
+}
+one sig A,B,C,D,E,F,G,H,I,J extends Class{}
+
+abstract sig Student {
+	classes: some Class,
+	enrolls: some Enroll
+}
+one sig Bill, John, Sara, Mary extends Student {}
+
+abstract sig Enroll {
+	stu: one Student,
+	cls: one Class
+}
+one sig E1,E2,E3,E4,E5,E6,E7,E8,E9,E10,E11,E12,E13 extends Enroll {}
+
+fact{
+	enrolls = Bill->(E1+E2+E3)
+	+ Sara->(E4+E5)
+	+ John->(E6+E7+E8+E9)
+	+ Mary->(E10+E11+E12+E13)
+
+	cls = E1->A + E2->B + (E3+E12)->C 
+	+ (E4+E10)->D + E5->E + E6->F 
+	+ (E7+E11)->G + E8->H + E9->I + E13->J
+
+	#classes < 6
+//	#takers < 6
+//	#enrolls < 6
+//	#stu < 4
+}
+
+
+pred show {}
+//fun show : z {}
+//run show for 13 Enroll, 10 Class, 4 Student
+run show
