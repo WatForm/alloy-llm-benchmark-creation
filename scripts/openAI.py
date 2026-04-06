@@ -1,5 +1,44 @@
 import sys
+import os
+import re
+import time
+import random
 from openai import OpenAI
+
+
+def _extract_retry_seconds(error):
+    """Best-effort parse of provider retry hints from exception text."""
+    text = str(error)
+    match = re.search(r"try again in\s*([0-9]+(?:\.[0-9]+)?)s", text, re.IGNORECASE)
+    if match:
+        return float(match.group(1))
+    return None
+
+
+def _call_with_retries(client, prompt, max_attempts, base_delay, max_delay):
+    for attempt in range(1, max_attempts + 1):
+        try:
+            response = client.chat.completions.create(
+                model="gpt-4",
+                messages=[{"role": "user", "content": prompt}],
+            )
+            return response.choices[0].message.content
+        except Exception as e:
+            if attempt >= max_attempts:
+                raise
+
+            hinted_wait = _extract_retry_seconds(e)
+            backoff_wait = min(max_delay, base_delay * (2 ** (attempt - 1)))
+            jitter = random.uniform(0.0, 0.4)
+            wait_seconds = max(hinted_wait or 0.0, backoff_wait) + jitter
+
+            print(
+                f"OpenAI call failed on attempt {attempt}/{max_attempts}: {e}. "
+                f"Retrying in {wait_seconds:.2f}s...",
+                file=sys.stderr,
+            )
+            time.sleep(wait_seconds)
+
 
 def main():
     # Check for correct number of arguments
@@ -12,7 +51,7 @@ def main():
 
     # Read API key
     with open("./secret/key", "r") as f:
-        key = f.read()
+        key = f.read().strip()
 
     # Read prompt from stdin when input_file is '-', otherwise read from file.
     if input_file == "-":
@@ -28,13 +67,23 @@ def main():
     # Initialize OpenAI client
     client = OpenAI(api_key=key)
 
-    # Get response from OpenAI
+    max_attempts = int(os.getenv("OPENAI_MAX_ATTEMPTS", "8"))
+    base_delay = float(os.getenv("OPENAI_RETRY_BASE_DELAY", "1.0"))
+    max_delay = float(os.getenv("OPENAI_RETRY_MAX_DELAY", "20.0"))
+
+    if max_attempts < 1:
+        print("Error: OPENAI_MAX_ATTEMPTS must be at least 1")
+        sys.exit(1)
+
+    # Get response from OpenAI with retry/backoff for transient limits/errors.
     try:
-        response = client.chat.completions.create(
-            model="gpt-4",
-            messages=[{"role": "user", "content": prompt}]
+        output_text = _call_with_retries(
+            client=client,
+            prompt=prompt,
+            max_attempts=max_attempts,
+            base_delay=base_delay,
+            max_delay=max_delay,
         )
-        output_text = response.choices[0].message.content
     except Exception as e:
         print(f"Error calling OpenAI API: {str(e)}")
         sys.exit(1)

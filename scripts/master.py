@@ -2,33 +2,60 @@
 
 import os
 import sys
+import time
+import random
 import subprocess
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
-def process_one(script_name, als_path, md_path):
-    result = subprocess.run([
-        './scripts/unit.sh',
-        script_name,
-        als_path,
-        md_path
-    ])
+def process_one(script_name, als_path, md_path, retries, retry_delay):
+    attempts = retries + 1
+    for attempt in range(1, attempts + 1):
+        result = subprocess.run([
+            './scripts/unit.sh',
+            script_name,
+            als_path,
+            md_path
+        ])
+        if result.returncode == 0:
+            return als_path, md_path, 0
+
+        if attempt < attempts:
+            sleep_s = retry_delay * (2 ** (attempt - 1)) + random.uniform(0.0, 0.4)
+            print(
+                f"Retrying {als_path} (attempt {attempt + 1}/{attempts}) after "
+                f"exit code {result.returncode}; sleeping {sleep_s:.2f}s...",
+                file=sys.stderr,
+            )
+            time.sleep(sleep_s)
+
     return als_path, md_path, result.returncode
 
 def main():
     # Check if required arguments are provided
-    if len(sys.argv) < 4 or len(sys.argv) > 5:
-        print("Usage: python master.py <scriptname> <source_folder> <destination_folder> [max_parallel]")
-        print("Example: python master.py openAI /path/to/source-folder /path/to/dest-folder 4")
+    if len(sys.argv) < 4 or len(sys.argv) > 7:
+        print("Usage: python master.py <scriptname> <source_folder> <destination_folder> [max_parallel] [retries] [retry_delay_s]")
+        print("Example: python master.py openAI /path/to/source-folder /path/to/dest-folder 4 2 2.0")
         sys.exit(1)
     
     arg1 = sys.argv[1]
     source_folder = os.path.abspath(sys.argv[2])
     dest_folder = os.path.abspath(sys.argv[3])
-    max_parallel = int(sys.argv[4]) if len(sys.argv) == 5 else 4
+    default_parallel = 2 if arg1.lower() == "openai" else 4
+    max_parallel = int(sys.argv[4]) if len(sys.argv) >= 5 else default_parallel
+    retries = int(sys.argv[5]) if len(sys.argv) >= 6 else 4
+    retry_delay = float(sys.argv[6]) if len(sys.argv) >= 7 else 2.0
 
     if max_parallel < 1:
         print("Error: max_parallel must be at least 1")
+        sys.exit(1)
+
+    if retries < 0:
+        print("Error: retries must be >= 0")
+        sys.exit(1)
+
+    if retry_delay < 0:
+        print("Error: retry_delay_s must be >= 0")
         sys.exit(1)
     
     # Create destination folder if it doesn't exist
@@ -64,11 +91,14 @@ def main():
         print("No .als files found.")
         return
 
-    print(f"Discovered {len(jobs)} model(s). Running with max_parallel={max_parallel}.")
+    print(
+        f"Discovered {len(jobs)} model(s). Running with max_parallel={max_parallel}, "
+        f"retries={retries}, retry_delay_s={retry_delay}."
+    )
 
     with ThreadPoolExecutor(max_workers=max_parallel) as executor:
         future_map = {
-            executor.submit(process_one, arg1, als_path, md_path): (als_path, md_path)
+            executor.submit(process_one, arg1, als_path, md_path, retries, retry_delay): (als_path, md_path)
             for als_path, md_path in jobs
         }
 
