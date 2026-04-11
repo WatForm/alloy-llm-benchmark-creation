@@ -1,0 +1,11 @@
+This Alloy model represents a family tree with a strong focus on fathers and grandfathers. Each person in the model is identified with a signature 'Person' which comes in two types, 'Woman' and 'Man', represented by separate signatures extending the abstract 'Person'. Every 'Person' has at most one 'father' and one 'mother', both of which are limited in number to 'one' and are assigned with the male and female genders respectively. A 'Man' is connected to his 'wife', defined as a Woman and happens to be unique 'one'. Similarly, each 'Woman' has a 'husband' who is a 'Man' and also is singular 'one'.
+
+The model constraints or rules of this family system are defined in a 'fact' section. The first rule states that no person can be a descendant of themselves, that is, they cannot be their own parent either through their 'father' or 'mother'. The second rule set forth ensures that the relationship between 'husband' and 'wife' is reciprocal, which means if 'Man' A is married to 'Woman' B, then 'Woman' B is also married to 'Man' A.
+
+There is an assertion named 'NoSelfFather', which ensures that no 'Man' can be his own 'father'. There is an associated check, which makes sure that there are no cases or counterexamples where this assertion is violated, thus preserving the integrity of the system.
+
+The model provides a function 'grandpas', which will return all the paternal grandfathers of a 'Person' by aggregating their mother's and father's fathers.
+
+There is a predicate 'ownGrandpa', which is checking for an absurd condition where a 'Person', through the course of their lineage, can end up to be their own grandpa. It is executed with the 'run' command to find any instances where this surreal condition might occur, within the given scope of a maximum of 4 'Person'.
+
+Finally, there is an assertion 'NoSelfGrandpa', which ensures no person can be his own grandpa. A check is associated with it to validate there are no instances in the family tree where a 'Person' can be his own grandpa, with a set limit of 4 'Person'. It states that for any instance of a 'Person', they should not appear in their own set of grandpas. That is, no person should be their own grandfather.
