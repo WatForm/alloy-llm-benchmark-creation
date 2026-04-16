@@ -1,5 +1,5 @@
 // FRUIT BOWL
-// Brett Kriz
+
 abstract sig Fruit{}
 
 abstract sig Color{}
@@ -34,5 +34,4 @@ fact{
 	contains = FruitBowl -> apple + FruitBowl -> orange
 }
 
-pred show{}
-run show
+

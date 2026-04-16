@@ -26,4 +26,4 @@ fact treeAcyclic {
   all n1, n2: Node | n1 in n2.neighbors implies 
     n1 not in n2.^(neighbors-(n2->n1)) } 
 
-run {} for 3 Node
+

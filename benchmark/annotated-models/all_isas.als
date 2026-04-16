@@ -27,6 +27,4 @@ fun all_isas[Es: set E] : set C
 	Es.isas.*genls
 }
 
-run
-{
-} for 0 but exactly 1 E, 5 C
+
