@@ -1,13 +1,4 @@
-/*
-sig Host {}
-sig Link {from, to: Host}
-fact {all x: Link | x.from != x.to}
-*/
 
-/*
-sig Host {}
-sig Link {from, to: Host} {from != to}
-*/
 
 sig Host {}
 sig Link {from, to : Host}
