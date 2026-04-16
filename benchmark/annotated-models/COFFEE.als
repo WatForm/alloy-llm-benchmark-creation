@@ -64,5 +64,4 @@ fact {
 }
 
 
-pred show{}
-run show
+
