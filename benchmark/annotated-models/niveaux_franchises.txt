@@ -1,0 +1,2 @@
+- Used LLM to translate french -> English (Should check this)
+- added fact to enforce predicate is_valid on all

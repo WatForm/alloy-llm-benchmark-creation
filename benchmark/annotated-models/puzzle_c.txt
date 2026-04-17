@@ -1,0 +1,1 @@
+- removed predC, except added fact to enforce no self requests

@@ -1,0 +1,1 @@
+- converted "invariants à valider" to fact, removed (cas de tests)

@@ -1,0 +1,1 @@
+- not sure what to do here, seems like it's supposed to show the policy doesn't work. Maybe we just remove the predicates? Alternatively we could convert it to a fact and invert it (i.e. make the analyzer find the crashing case)

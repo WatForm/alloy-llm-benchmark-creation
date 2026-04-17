@@ -1,0 +1,2 @@
+- removed unused fun neighbors
+- removed pred show

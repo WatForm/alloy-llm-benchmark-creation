@@ -1,0 +1,5 @@
+- changed predicates Acyclic and makeFull into facts
+- removed fullTree predicate
+- removed run FullTree
+
+I believe models will exist for "run {} for x" iff x = 2^k-1 - since this model constructs full binary trees

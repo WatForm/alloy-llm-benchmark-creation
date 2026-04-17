@@ -1,0 +1,1 @@
+- converted Soundness 1, Soundness2, and Completeness into facts

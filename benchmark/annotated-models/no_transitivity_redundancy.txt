@@ -1,0 +1,2 @@
+- removed all preds and the runs (they seem to just be test cases)
+- changed "suivant" to "next"

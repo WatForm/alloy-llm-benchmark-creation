@@ -1,0 +1,2 @@
+- removed empty pred
+- removed comments (since japanese)

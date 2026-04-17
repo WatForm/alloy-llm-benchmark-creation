@@ -1,0 +1,1 @@
+- converted pred Puzzle to fact (core part of model)

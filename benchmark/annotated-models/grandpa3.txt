@@ -1,0 +1,3 @@
+- removed assert NoSelfFather and the check for it (enforced by others)
+- removed SocialConvention 1, SocialConvention 2, assert same, and check same (socialConvention is already fact)
+- removed fun grandpas, pred ownGrandpa, run ownGrandpa (was only used to see "interesting" instances)
