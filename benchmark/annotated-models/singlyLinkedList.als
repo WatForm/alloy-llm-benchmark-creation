@@ -9,5 +9,5 @@ sig Node {
 }
 
 fact Acyclic {
-    all l: list | no l.header or some n: l.header.*link | no n.link
+    all l: List | no l.header or some n: l.header.*link | no n.link
 }

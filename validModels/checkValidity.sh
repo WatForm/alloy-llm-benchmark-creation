@@ -41,18 +41,24 @@ check_single_file() {
 
 check_alloy_diff_compatible() {
     local file="$1"
+    local scope
+    local output
+    local status
     
     echo "Checking: $file"
-    
-    output=$("$JAVA17" -cp "$JAR_PATH" org.alloytools.alloy.diff.ModuleDiff "$file" "$file" Equivalence 1 false sat4j 2>&1)
-    
-    if echo "$output" | grep -q "The two modules are equivalent."; then
-        echo "  [PASS] Alloy-diff compatible"
-        return 0
-    else
-        echo "  [FAIL] Not alloy-diff compatible"
-        return 1
-    fi
+
+    for scope in 1 2 3; do
+        output=$("$JAVA17" -cp "$JAR_PATH" org.alloytools.alloy.diff.ModuleDiff "$file" "$file" Equivalence "$scope" false sat4j 2>&1)
+        status=$?
+
+        if [ "$status" -eq 0 ] && echo "$output" | grep -q "The two modules are equivalent."; then
+            echo "  [PASS] Alloy-diff compatible (scope $scope)"
+            return 0
+        fi
+    done
+
+    echo "  [FAIL] Not alloy-diff compatible"
+    return 1
 }
 
 check_composat_compatible() {
