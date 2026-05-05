@@ -7,3 +7,7 @@
 
 
 No changes made, TODO
+
+- All asserts can be removed entirely
+- 8 Link becomes a fact using cardinality
+- GoodSpec becomes a fact
