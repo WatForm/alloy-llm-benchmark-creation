@@ -34,30 +34,16 @@ pred GatePolicy [g: GateState, x: TrainState] {
   all s1, s2: Seg | some s1.next.overlaps & s2.next => lone (s1+s2) - g.closed
 }
 
-assert PolicyWorks {
-  all x, x": TrainState, g: GateState, ts: set Train |
-    {MayMove [g, x, ts]
-    TrainsMove [x, x", ts]
-    Safe [x]
-    GatePolicy [g, x]
-    } => Safe [x"]
-  }
-
--- has counterexample in scope of 4
-check PolicyWorks for 2 Train, 1 GateState, 2 TrainState, 4 Seg expect 1
 
 pred TrainsMoveLegal [x, x": TrainState, g: GateState, ts: set Train] {
   TrainsMove [x, x", ts]
   MayMove [g, x, ts]
   GatePolicy [g, x]
   }
-run TrainsMoveLegal for 3 expect 1
 
-
-
-// DEFINED VARIABLES
-// Defined variables are uncalled, no-argument functions.
-// They are helpful for getting good visualization.
-fun contains [] : TrainState -> Seg -> Train {
-	{state: TrainState, seg: Seg, train: Train | seg = train.(state.on)}
+fact forceMovementToOccur {
+  some x, x": TrainState, g: GateState, ts: set Train | {
+    some ts
+    TrainsMoveLegal[x, x", g, ts]
+  }
 }

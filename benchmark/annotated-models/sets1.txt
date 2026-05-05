@@ -1,1 +1,2 @@
 - similar to railway I think, do we want to invert the assert?
+- changed to invert it (core part of model)

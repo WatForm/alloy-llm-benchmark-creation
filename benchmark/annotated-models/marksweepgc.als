@@ -55,23 +55,7 @@ pred GC[hs: HeapState, root : Node, hs": HeapState] {
     hs.clearMarks[hs1] && hs1.mark[root, hs2] && hs2.setFreeList[hs"]
 }
 
-fact Soundness1 {
-  all h, h" : HeapState, root : Node |
-    h.GC[root, h"] =>
-      (all live : h.reachable[root] | {
-        h".left[live] = h.left[live]
-        h".right[live] = h.right[live]
-      })
-}
-
-fact Soundness2 {
-  all h, h" : HeapState, root : Node |
-    h.GC[root, h"] =>
-      no h".reachable[root] & h".reachable[h".freeList]
-}
-
-fact Completeness {
-  all h, h" : HeapState, root : Node |
-    h.GC[root, h"] =>
-      (Node - h".reachable[root]) in h".reachable[h".freeList]
+fact GCHappened {
+  some hs_start, hs_end: HeapState, root: Node |
+    GC[hs_start, root, hs_end]
 }

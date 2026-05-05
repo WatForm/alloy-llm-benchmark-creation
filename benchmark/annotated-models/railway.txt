@@ -1,1 +1,5 @@
 - not sure what to do here, seems like it's supposed to show the policy doesn't work. Maybe we just remove the predicates? Alternatively we could convert it to a fact and invert it (i.e. make the analyzer find the crashing case)
+- probably pick if you want safe or gate policy? doesn't really matter - maybe make gate policy apply, but not safe
+- remove assertion for policyWorks
+- trainMoveLegal enforced
+- not correct though - similar to marksweepgc - many states, two of which have a legal move.

@@ -1,1 +1,2 @@
-- converted NoOneCanGradetheirOwnAssignment from assert to fact
+- convert NoOneCanGradetheirOwnAssignment to fact or remove?
+- excess comments removed

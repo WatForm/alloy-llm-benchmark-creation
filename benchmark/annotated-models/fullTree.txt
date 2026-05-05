@@ -1,5 +1,4 @@
-- changed predicates Acyclic and makeFull into facts
-- removed fullTree predicate
-- removed run FullTree
+- pred Acyclic: Core to model, converted to fact
+- pred makeFull: Core to model, converted to fact
 
-I believe models will exist for "run {} for x" iff x = 2^k-1 - since this model constructs full binary trees
+texist for "run {} for x" iff x = 2^k-1 - since this model constructs full binary trees

@@ -1,1 +1,1 @@
-- converted pred Acyclic to fact
+- converted pred Acyclic to fact (core part of model)
