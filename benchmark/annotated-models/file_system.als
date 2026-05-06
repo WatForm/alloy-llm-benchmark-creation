@@ -55,4 +55,4 @@ pred NoDirAliases {
 
 check { OneParent_buggyVersion => NoDirAliases } for 5 expect 1
 
-check { OneParent_correctVersion => NoDirAliases } for 5 expect 0
+

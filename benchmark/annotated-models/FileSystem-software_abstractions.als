@@ -17,4 +17,4 @@ fact{
 	all a: Alias | not a in a.^to
 	}
 
-run {} for 5
+

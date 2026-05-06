@@ -42,7 +42,7 @@ pred UnscheduledGame{
 some g:Game| g not  in FieldComplex.schedule 
 }
 //Use the following run command to explore the state space of the static model:
-run{
+fact {
 ScheduledGame
 	UnscheduledGame
 } for 5

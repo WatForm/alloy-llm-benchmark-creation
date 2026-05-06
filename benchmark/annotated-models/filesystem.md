@@ -1,6 +1,20 @@
 ## Changes
 
-- none
+
+```
+assert SomeDir {
+	all o: Object - Root | some contents.o
+	}
+check SomeDir // This assertion is valid
+
+assert FileInDir {
+	all f: File | some contents.f
+	}
+check FileInDir // This assertion is valid
+
+```
+
+These are valid assertions, and thus removed
 
 ## Comments
 
