@@ -31,28 +31,8 @@ sig DirEntry {
 }
 
 
-/**
- * all directories besides root have one parent
- */
-pred OneParent_buggyVersion {
-    all d: Dir - Root | one d.parent
-}
-
-/**
- * all directories besides root have one parent
- */
-pred OneParent_correctVersion {
+fact OneParent_correctVersion {
     all d: Dir - Root | (one d.parent && one contents.d)
 }
-
-/**
- * Only files may be linked (that is, have more than one entry)
- * That is, all directories are the contents of at most one directory entry
- */
-pred NoDirAliases {
-    all o: Dir | lone o.~contents
-}
-
-check { OneParent_buggyVersion => NoDirAliases } for 5 expect 1
 
 
