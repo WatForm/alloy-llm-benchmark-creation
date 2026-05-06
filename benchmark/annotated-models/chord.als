@@ -83,17 +83,12 @@ pred FingersCorrect [s: State] {
                 (no n" : s.active | less_than [start, n".id, nd.finger[start].id])
         }
 
+fact {
+        all s : State | FingersCorrect[s]
+}
 
-pred FingersCorrect" [s: State] {
-        all n: s.active | let nd = (s.data)[n] | all start: Node.~(nd.finger) {
-                nd.finger[start] in s.active &&
-                (let next" = Id<:next - (nd.finger[start].id -> Id) {
-                        no n" : s.active - nd.finger[start] {
-                                n".id in start.*next"
-                        }
-                })
-            }
-        }
+
+
 
 
 assert SameFC {all s: State | FingersCorrect [s] iff FingersCorrect"[s]}
@@ -116,21 +111,11 @@ pred ClosestPrecedingFinger[s: State] {
                 }
         }
 
+fact {
+        all s : State | ClosestPrecedingFinger[s]
+}
 
-pred ClosestPrecedingFinger"[s: State] {
-        all n: s.active | let nd = (s.data)[n] | all i: Id {
-                let next" = Id<:next - (Id -> i) {
-                        nd.next.id in n.id.^next" =>
-                                // nd.closest_preceding_finger[i] = nd.next,
-                                (some n1: nd.finger[Id] {
-                                        nd.closest_preceding_finger[i] = n1
-                                        //n1 in nd.finger[Id]
-                                        n1.id in n.id.^next"
-                                        no n2: nd.finger[Id] | n2.id in n1.id.^next"
-                                }) else
-                        nd.closest_preceding_finger[i] = n
-                }}
-        }
+
 
 
 assert SameCPF {all s: State | FingersCorrect[s] => (ClosestPrecedingFinger [s] iff ClosestPrecedingFinger" [s])}

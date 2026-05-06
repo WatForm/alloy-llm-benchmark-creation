@@ -68,6 +68,14 @@ fact {all s: State | all n: s.active | n.(s.data).next = n.(s.data).finger[n.id.
 fact {
       all s: State | NextCorrect[s]  
 }
+
+fact {
+        all s : State | FingersCorrect[s]
+}
+
+fact {
+        all s : State | ClosestPrecedingFinger[s]
+}
 ```
 added
 
@@ -78,6 +86,32 @@ pred NextCorrect" [s: State] {
         all n: s.active | let nd = (s.data)[n] {
                 let next" = Id<:next - (Id -> nd.next.id) {
                         no n" : s.active { n".id in n.id.^next" }
+                }}
+        }
+
+pred FingersCorrect" [s: State] {
+        all n: s.active | let nd = (s.data)[n] | all start: Node.~(nd.finger) {
+                nd.finger[start] in s.active &&
+                (let next" = Id<:next - (nd.finger[start].id -> Id) {
+                        no n" : s.active - nd.finger[start] {
+                                n".id in start.*next"
+                        }
+                })
+            }
+        }
+
+pred ClosestPrecedingFinger"[s: State] {
+        all n: s.active | let nd = (s.data)[n] | all i: Id {
+                let next" = Id<:next - (Id -> i) {
+                        nd.next.id in n.id.^next" =>
+                                // nd.closest_preceding_finger[i] = nd.next,
+                                (some n1: nd.finger[Id] {
+                                        nd.closest_preceding_finger[i] = n1
+                                        //n1 in nd.finger[Id]
+                                        n1.id in n.id.^next"
+                                        no n2: nd.finger[Id] | n2.id in n1.id.^next"
+                                }) else
+                        nd.closest_preceding_finger[i] = n
                 }}
         }
 ```
