@@ -35,7 +35,7 @@ sig NodeData {
         find_successor: Id -> one Node
         }
 
-sig State {
+one sig State {
         active: set Node,
         data: active -> one NodeData
         }
@@ -58,13 +58,11 @@ pred NextCorrect [s: State] {
                 }
         }
 
-pred NextCorrect" [s: State] {
--- next seems to be correct for 1,2,3 nodes
-        all n: s.active | let nd = (s.data)[n] {
-                let next" = Id<:next - (Id -> nd.next.id) {
-                        no n" : s.active { n".id in n.id.^next" }
-                }}
-        }
+fact {
+      all s: State | NextCorrect[s]  
+}
+
+
 
 // valid
 assert Same1 {all s: State | NextCorrect[s] => NextCorrect"[s]}

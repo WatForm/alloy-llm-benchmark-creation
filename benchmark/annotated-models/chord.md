@@ -48,3 +48,39 @@ try running in the AA
 
 
 
+State changed to one sig
+```
+one sig State {
+        active: set Node,
+        data: active -> one NodeData
+        }
+```
+
+```
+fact {all s: State | all n: s.active | n.(s.data).next = n.(s.data).finger[n.id.next]}
+
+```
+- no changes to this
+
+
+
+```
+fact {
+      all s: State | NextCorrect[s]  
+}
+```
+added
+
+
+```
+pred NextCorrect" [s: State] {
+-- next seems to be correct for 1,2,3 nodes
+        all n: s.active | let nd = (s.data)[n] {
+                let next" = Id<:next - (Id -> nd.next.id) {
+                        no n" : s.active { n".id in n.id.^next" }
+                }}
+        }
+```
+removed
+
+
