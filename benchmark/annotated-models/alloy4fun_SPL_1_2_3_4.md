@@ -30,6 +30,21 @@ assert OneDerivation{
 check OneDerivation for 20
 check OneDerivation for 30
 
+pred BadSpec {
+	// Private and public links, if existing, must be different
+	all m : StoredModel | m.public != m.secret
+}
+
+pred GoodSpec {
+	// Private and public links, if existing, must be different
+	all m : StoredModel | no m.public & m.secret
+}
+
+run {GoodSpec} for 4 but 8 Link
+
 ```
 
 removed totally
+
+
+goodSpec removed because it's used only in one assert, not core to the model

@@ -16,6 +16,11 @@ check FileInDir // This assertion is valid
 
 These are valid assertions, and thus removed
 
+
+TODO:
+
+drop the last assertion as well
+
 ## Comments
 
 
@@ -32,3 +37,4 @@ These are valid assertions, and thus removed
 - RootTop produces a counterexample because there is no fact that says nothing can contain root, or contain something that itself contains root, and so on.
 
 - The only fact given says that the whole system must contain one object besides the root itself
+

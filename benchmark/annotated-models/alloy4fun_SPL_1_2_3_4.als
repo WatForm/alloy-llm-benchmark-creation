@@ -47,15 +47,9 @@ fact Links {
 	all m : Secret | some m.public implies some m.(^derivationOf+iden).secret
 }
 
-pred BadSpec {
-	// Private and public links, if existing, must be different
-	all m : StoredModel | m.public != m.secret
-}
 
-pred GoodSpec {
-	// Private and public links, if existing, must be different
-	all m : StoredModel | no m.public & m.secret
-}
+
+
 
 fact Derivations {
 	// The derivations form a tree
@@ -85,6 +79,5 @@ fact Instances {
 
 
 
-run {GoodSpec} for 4 but 8 Link
 
 

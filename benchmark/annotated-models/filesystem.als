@@ -18,5 +18,3 @@ assert RootTop {
 	no o: Object | Root in o.contents
 	}
 check RootTop // This assertion should produce a counterexample
-
-
