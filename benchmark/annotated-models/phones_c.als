@@ -15,7 +15,3 @@ fact ConnectsRequestsC {
 	// no conference calls
 	all x : Phone | lone connects.x
 }
-
-fact NoSelfCalls {
-    no requests & iden
-}

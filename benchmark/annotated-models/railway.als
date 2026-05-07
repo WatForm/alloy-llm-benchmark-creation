@@ -18,6 +18,10 @@ fact {all x: TrainState |
   x.occupied = {s: Seg | some t: Train | t.(x.on) = s}
   }
 
+sig ts in Train{}
+one sig x, x' in TrainState {}
+one sig g extends GateState {}
+
 pred Safe [x: TrainState] {all s: Seg | lone s.overlaps.~(x.on)}
 
 pred MayMove [g: GateState, x: TrainState, ts: set Train] {
@@ -42,8 +46,5 @@ pred TrainsMoveLegal [x, x": TrainState, g: GateState, ts: set Train] {
   }
 
 fact forceMovementToOccur {
-  some x, x": TrainState, g: GateState, ts: set Train | {
-    some ts
-    TrainsMoveLegal[x, x", g, ts]
-  }
+  TrainMoveLegal[x, x', g, ts]
 }

@@ -11,6 +11,9 @@ sig HeapState {
   freeList : lone Node
 }
 
+one sig h, h' in HeapState {}
+one sig root extends Node {}
+
 pred clearMarks[hs, hs" : HeapState] {
   // clear marked set
   no hs".marked
@@ -55,7 +58,6 @@ pred GC[hs: HeapState, root : Node, hs": HeapState] {
     hs.clearMarks[hs1] && hs1.mark[root, hs2] && hs2.setFreeList[hs"]
 }
 
-fact GCHappened {
-  some hs_start, hs_end: HeapState, root: Node |
-    GC[hs_start, root, hs_end]
+fact GCHappened{
+  GC[h,root, h']
 }

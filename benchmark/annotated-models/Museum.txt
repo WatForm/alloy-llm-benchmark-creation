@@ -3,3 +3,6 @@
 - Need to figure out what is going on here, many comments indicate incomplete, may be bugs... not really sure
 
 - probably keep it, remove extra stuff
+
+
+stripped comments, leave possibly wrong facts

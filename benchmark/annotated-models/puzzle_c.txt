@@ -1,2 +1,1 @@
 - removed pred showC (interesting instances)
-- except added fact to enforce no self requests (core part of model?)

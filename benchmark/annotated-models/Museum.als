@@ -27,8 +27,6 @@ one sig Museum {
  */
 fact F1_All_pictures_onDisplay_or_on_loan {
 	all p: Picture |p in (Museum.onDisplay + Client.loaned )
-//or.. Museum.onDisplay and Client.loanard ..
-//...apparently and does not run !
 }
 
 /**
@@ -38,8 +36,7 @@ fact F1_All_pictures_onDisplay_or_on_loan {
  *	eligible for loaning to clients.
  */
 fact F2_All_pictures_permanent_are_onDisplay {
-//	all p : Museum.permanen
-all p: Picture,m: Museum | p in m.permanent => p in m.onDisplay
+  all p: Picture,m: Museum | p in m.permanent => p in m.onDisplay
 }
 
 /**
@@ -47,7 +44,6 @@ all p: Picture,m: Museum | p in m.permanent => p in m.onDisplay
  *  (Similar to F1, but different expression)
  */
 fact F3_No_picture_onDisplay_and_loaned {
-// Museum
 	 no Museum.onDisplay & Client.loaned
 }
 
@@ -56,19 +52,14 @@ fact F3_No_picture_onDisplay_and_loaned {
  *	in the permanent collection.
  */
 fact F4_Client_cannot_desire_permanent_pictures {
-	// Fill in this body
-	all c: Client|  c.desires != Museum.permanent// can not have in its set.
-//	all c : Client | no c.desires & Museum.permanent  //
+	all c: Client|  c.desires != Museum.permanent
 }	
 
 /**
  *	A client cannot desire a picture he or she has been loaned.
  */
 fact F5_Cannot_desire_what_you_are_loaned {
-	// Fill in this body
-all c : Client | no c.desires & c.loaned
-//all c:Client |no c.desires + c.loeaned.
-//received an error with +..
+  all c : Client | no c.desires & c.loaned
 }
 
 /**
@@ -77,18 +68,12 @@ all c : Client | no c.desires & c.loaned
  *	that no other client desires.
  */
 fact F6_All_desired_pictures_are_loaned {
-	// Fill in this body
-	//y
-all d:Client.desires, p:Picture |p in d => p in Client.loaned
-
+  all d:Client.desires, p:Picture |p in d => p in Client.loaned
 }
 
 /**
  *	Two different clients cannot be loaned the same picture.
  */
 fact F7_No_loan_conflicts {
-	// Fill in this body
-all c1, c2 : Client | (c1 != c2) => //so c1 and c2 was said to not be equal..and therefore..
-(no c1.loaned & c2.loaned) //there DNE an cl and c2 that are same
-//from class example..
+  all c1, c2 : Client | (c1 != c2) => (no c1.loaned & c2.loaned)
 }

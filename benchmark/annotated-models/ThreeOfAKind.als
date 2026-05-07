@@ -1,8 +1,8 @@
 sig Card {suit: Suit}
 sig Suit {}
 
+sig hand in Card {}
+
 fact ThreeOfAKind {
-    some hand: set Card | {
-        #hand = 3 and #hand.suit = 1 
-    }
+    #hand = 3 and #hand.suit = 1 
 }

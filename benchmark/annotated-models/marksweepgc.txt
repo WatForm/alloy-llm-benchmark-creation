@@ -1,3 +1,5 @@
 - remove soundness, completeness predicates (implied by rest)
 - convert GC to fact (core to model) - by adding new fact that calls predicate
 - don't think correct though since this will just generate a bunch of states where there is a correct GC between two of them
+
+- added h and h', enforce gc between them

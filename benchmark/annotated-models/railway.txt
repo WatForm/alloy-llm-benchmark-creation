@@ -3,3 +3,5 @@
 - remove assertion for policyWorks
 - trainMoveLegal enforced
 - not correct though - similar to marksweepgc - many states, two of which have a legal move.
+
+fix same as marksweepgc
