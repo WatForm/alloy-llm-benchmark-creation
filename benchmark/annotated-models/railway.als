@@ -19,7 +19,7 @@ fact {all x: TrainState |
   }
 
 sig ts in Train{}
-one sig x, x' in TrainState {}
+one sig x, x" in TrainState {}
 one sig g extends GateState {}
 
 pred Safe [x: TrainState] {all s: Seg | lone s.overlaps.~(x.on)}
@@ -46,5 +46,5 @@ pred TrainsMoveLegal [x, x": TrainState, g: GateState, ts: set Train] {
   }
 
 fact forceMovementToOccur {
-  TrainMoveLegal[x, x', g, ts]
+  TrainsMoveLegal[x, x", g, ts]
 }

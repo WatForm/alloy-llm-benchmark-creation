@@ -63,10 +63,6 @@ fact {
 }
 
 
-
-
-
-
 -- says that finger entry maps an id to a node so that there are no intervening nodes
 -- between the id and the node
 pred FingersCorrect [s: State] {
@@ -78,8 +74,6 @@ pred FingersCorrect [s: State] {
 fact {
         all s : State | FingersCorrect[s]
 }
-
-
 
 
 pred ClosestPrecedingFinger[s: State] {
@@ -97,21 +91,13 @@ fact {
 }
 
 
-
-
-
-
-
-
-
-
 pred FindPredecessor[s: State] {
         all n: s.active | let nd = n.(s.data) | all i: Id {
                 nd.find_predecessor[i] =
                         (less_than_eq [n.id, i, nd.next.id] && (n.id != i || # s.active = 1)
                         => n
                         else (nd.closest_preceding_finger[i].(s.data).find_predecessor)[i])
-                }k
+                }
         }
 
 fact {
@@ -119,20 +105,7 @@ fact {
 }
 
 
-
-
-
 pred FindSuccessor[s: State] {
         all n: s.active | let nd = (s.data)[n] | all i: Id {
                 nd.find_successor[i] = ((s.data)[nd.find_predecessor[i]]).next
         }}
-
-
-
-
-
-
-
-
-
-
