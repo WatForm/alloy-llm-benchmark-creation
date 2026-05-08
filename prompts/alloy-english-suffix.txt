@@ -4,7 +4,7 @@ Write a natural English description of this Alloy model that captures all the in
 
 Requirements:
 
-- Use the exact names from the model (signatures, fields) - don't rename anything
+- Use the exact names for signatures and fields - don't rename anything
 - Describe what sets and relations exist, how they relate, and what constraints apply
 - State constraints as simple facts, not as instructions (e.g., just say "X cannot be Y", not "create a fact that X cannot be Y")
 - Don't explain HOW to implement constraints or WHY they exist - just state WHAT is constrained
@@ -13,12 +13,13 @@ Requirements:
 - Describe predicates and commands: their names, what they check/specify, and any scope or expected results
 - Description should be general enough it could be written in any formal language, not just alloy. Nothing you write should be specific to alloy.
 - You may directly refer to the importing of alloy modules
+- Write constraints in pure english. (e.g., don't say "b.a is not an element of x", say a's cannot be x)
 
 DON'T:
 - Include Alloy syntax or code
 - Prescribe how to organize the model
 - Explain implementation details
 - Add explanations beyond stating the constraints themselves
-- Refer to alloy terminology directly. (e.g., don't say there is a predicate x). Examples: Signature, predicate, function, instance, fact
+- Refer to alloy terminology directly. (e.g., don't say there is a predicate x). Examples: Signature, predicate, function, instance, fact, abstract
 - Directly enforce the structure of the model. (e.g., don't specify the exact predicates/functions/facts, even if you don't call them that)
 - Quote anything except the names of signatures or fields.
