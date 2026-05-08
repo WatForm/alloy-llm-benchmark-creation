@@ -10,16 +10,19 @@ Requirements:
 - Don't explain HOW to implement constraints or WHY they exist - just state WHAT is constrained
 - Be explicit about relationships - don't assume meaning from names (e.g., if "parent" relates to "ancestor", state that relationship explicitly)
 - Include all multiplicity constraints, quantifiers, and logical conditions
-- Describe predicates and commands: their names, what they check/specify, and any scope or expected results
+- Describe derived concepts, rules, and assertions: their names, what conditions they represent or check, and any expected results
 - Description should be general enough it could be written in any formal language, not just alloy. Nothing you write should be specific to alloy.
 - You may directly refer to the importing of alloy modules
-- Write constraints in pure english. (e.g., don't say "b.a is not an element of x", say a's cannot be x)
+- Write constraints in pure english. (e.g., don't say "b.a is not an element of x", say no element of a can be x)
 
 DON'T:
-- Include Alloy syntax or code
+- Include Alloy syntax, code, or formal parameter notation (e.g., do not write predicate[b,n], do not write "a.field")˜
 - Prescribe how to organize the model
 - Explain implementation details
 - Add explanations beyond stating the constraints themselves
 - Refer to alloy terminology directly. (e.g., don't say there is a predicate x). Examples: Signature, predicate, function, instance, fact, abstract
 - Directly enforce the structure of the model. (e.g., don't specify the exact predicates/functions/facts, even if you don't call them that)
 - Quote anything except the names of signatures or fields.
+- Repeat yourself or rephrase rules using words like "equivalently" or "in other words"
+- Require a specific decomposition into functions, facts, and predicates. There are multiple correct ways to structure the alloy model, it does not have to be the same as the original.
+- List what is NOT in the model (e.g., do not say "there are no other fields" or "there is no check command")
