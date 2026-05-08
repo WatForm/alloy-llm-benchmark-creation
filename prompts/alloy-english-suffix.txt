@@ -11,8 +11,7 @@ Requirements:
 - Be explicit about relationships - don't assume meaning from names (e.g., if "parent" relates to "ancestor", state that relationship explicitly)
 - Include all multiplicity constraints, quantifiers, and logical conditions
 - Describe predicates and commands: their names, what they check/specify, and any scope or expected results
-- Do not directly refer to alloy terminology directly. (e.g., don't say there is a predicate x). Examples: Signature, predicate, function, instance, fact
-- Description should be general enough it could be written in any formal language, not just alloy
+- Description should be general enough it could be written in any formal language, not just alloy. Nothing you write should be specific to alloy.
 - You may directly refer to the importing of alloy modules
 
 DON'T:
@@ -20,3 +19,6 @@ DON'T:
 - Prescribe how to organize the model
 - Explain implementation details
 - Add explanations beyond stating the constraints themselves
+- Refer to alloy terminology directly. (e.g., don't say there is a predicate x). Examples: Signature, predicate, function, instance, fact
+- Directly enforce the structure of the model. (e.g., don't specify the exact predicates/functions/facts, even if you don't call them that)
+- Quote anything except the names of signatures or fields.
