@@ -19,7 +19,7 @@ def _call_with_retries(client, prompt, max_attempts, base_delay, max_delay):
     for attempt in range(1, max_attempts + 1):
         try:
             response = client.chat.completions.create(
-                model="gpt-4",
+                model="gpt-5.4",
                 messages=[{"role": "user", "content": prompt}],
             )
             return response.choices[0].message.content

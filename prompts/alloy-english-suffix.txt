@@ -11,6 +11,9 @@ Requirements:
 - Be explicit about relationships - don't assume meaning from names (e.g., if "parent" relates to "ancestor", state that relationship explicitly)
 - Include all multiplicity constraints, quantifiers, and logical conditions
 - Describe predicates and commands: their names, what they check/specify, and any scope or expected results
+- Do not directly refer to alloy terminology directly. (e.g., don't say there is a predicate x). Examples: Signature, predicate, function, instance, fact
+- Description should be general enough it could be written in any formal language, not just alloy
+- You may directly refer to the importing of alloy modules
 
 DON'T:
 - Include Alloy syntax or code
