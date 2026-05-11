@@ -47,10 +47,6 @@ fact Links {
 	all m : Secret | some m.public implies some m.(^derivationOf+iden).secret
 }
 
-
-
-
-
 fact Derivations {
 	// The derivations form a tree
 	no m : StoredModel | m in m.^derivationOf

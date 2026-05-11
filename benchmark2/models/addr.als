@@ -1,4 +1,3 @@
-
 abstract sig Listing { }
 sig Address extends Listing { }
 sig Name extends Listing { }
