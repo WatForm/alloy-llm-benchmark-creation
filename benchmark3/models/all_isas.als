@@ -1,5 +1,3 @@
--- all_isas relation from isa relation
-
 open util/relation
 open util/graph[C]
 

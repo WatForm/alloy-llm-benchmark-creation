@@ -1,9 +1,3 @@
-/*
-    From section 2 of paper
-    Colored, undirected trees
-    Unbuggy version (including antireflexivity)
-*/
-
 abstract sig Color {}
 one sig Red extends Color {}
 one sig Blue extends Color {}
@@ -14,8 +8,8 @@ sig Node {
 } 	
 
 fact undirected {
-  neighbors = ~neighbors   -- symmetric
-  no iden & neighbors      -- antireflexive	
+  neighbors = ~neighbors
+  no iden & neighbors
 }
 
 fact graphIsConnected {

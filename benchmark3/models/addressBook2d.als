@@ -1,4 +1,4 @@
-module tour/addressBook2d ----- Page 21
+module tour/addressBook2d
 
 abstract sig Target { }
 sig Addr extends Target { }
