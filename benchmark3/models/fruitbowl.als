@@ -1,4 +1,4 @@
-// FRUIT BOWL
+
 
 abstract sig Fruit{}
 

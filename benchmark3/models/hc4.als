@@ -1,7 +1,4 @@
-module hc4	-- version 0.04
-
--- New way of describing connectivity that will allow
--- for a finer grained approach to moment distrubution
+module hc4	
 
 abstract sig Vertex {
 	left: lone Vertex,
@@ -11,16 +8,14 @@ sig Joint extends Vertex {}
 sig End extends Vertex {}
 
 
------------ Connectivity Section -----------
 
--- All ends must only be connected right or left
 fact {
 	all e: End |
 		(e.left = none and e = e.right.left) or
 		(e.right = none and e = e.left.right)
 }
 
--- All joints must be connected both left and right
+
 fact {
 	all j: Joint |
 		j = j.left.right and 
@@ -28,7 +23,7 @@ fact {
 		j.left != j.right
 }
 
--- All other vertices are reachable by following the right or left relation
+
 fact {
 	all v: Vertex |
 		Vertex - v = v.(^left + ^right)

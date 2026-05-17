@@ -2,7 +2,7 @@ abstract sig Person {}
 sig Student extends Person {}
 sig Professor extends Person {}
 sig Class {
-	assistant_for: set Student,   // as in : "is TA for"
+	assistant_for: set Student,   
 	instructor_of: one Professor
 }
 sig Assignment {

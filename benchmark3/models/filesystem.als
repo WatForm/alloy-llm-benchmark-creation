@@ -1,4 +1,4 @@
-module chapter4/filesystem ----- The model from page 125
+module chapter4/filesystem 
 
 abstract sig Object {}
 

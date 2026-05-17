@@ -1,8 +1,4 @@
-/*
- * Model of mark and sweep garbage collection.
- */
 
-// a node in the heap
 sig Node {}
 
 sig HeapState {
@@ -15,16 +11,14 @@ one sig h, h" in HeapState {}
 one sig root extends Node {}
 
 pred clearMarks[hs, hs" : HeapState] {
-  // clear marked set
+  
   no hs".marked
-  // left and right fields are unchanged
+  
   hs".left = hs.left
   hs".right = hs.right
 }
 
-/**
- * simulate the recursion of the mark() function using transitive closure
- */
+
 fun reachable[hs: HeapState, n: Node] : set Node {
   n + n.^(hs.left + hs.right)
 }
@@ -35,11 +29,9 @@ pred mark[hs: HeapState, from : Node, hs": HeapState] {
   hs".right = hs.right
 }
 
-/**
- * complete hack to simulate behavior of code to set freeList
- */
+
 pred setFreeList[hs, hs": HeapState] {
-  // especially hackish
+  
   hs".freeList.*(hs".left) in (Node - hs.marked)
   all n: Node |
     (n !in hs.marked) => {

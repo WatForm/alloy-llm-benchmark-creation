@@ -1,7 +1,4 @@
 
-/*
- * Model of a generic file system.
- */
 
 abstract sig Object {}
 

@@ -1,4 +1,4 @@
-module language/grandpa3 ---- the final model in fig 4.4
+module language/grandpa3 
 
 abstract sig Person {
 	father: lone Man,
