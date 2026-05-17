@@ -22,7 +22,6 @@ sig Date {}
 	some application_date.this
 }
 
--- Model
 pred ModificationSpec[ M: Modification ]
 {
 	one M.modified_entity
