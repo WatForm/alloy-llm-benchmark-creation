@@ -7,7 +7,3 @@ fact{
 	Object in Root.*contents
 	all o: Object - Root | one o.~contents
 	}
-
-
-
-

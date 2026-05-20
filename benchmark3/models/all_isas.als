@@ -25,4 +25,3 @@ fun all_isas[Es: set E] : set C
 	Es.isas.*genls
 }
 
-

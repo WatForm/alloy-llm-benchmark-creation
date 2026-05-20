@@ -12,8 +12,3 @@ sig Book {
 	no n: Name | n in n.^addr
 	all a: Alias | lone a.addr
 }
-
-
-
-
-
