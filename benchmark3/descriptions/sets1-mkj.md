@@ -2,8 +2,12 @@
 
 There are two kinds of entities: "Set" and "Element".
 
-Each "Set" is related by "elements" to zero or more "Element" entities.
+> changed
+
+Each "Set" has zero or more "Element"s
 
 The following constraint holds and is named "NotClosed":
 
-There exist some "Set" entities s0 and s1 such that, for every "Set" entity s2, the "elements" related to s2 are not exactly the union of the "elements" related to s0 and the "elements" related to s1.
+> changed
+
+There exists a pair of sets such that the union of their elements is not another set.
