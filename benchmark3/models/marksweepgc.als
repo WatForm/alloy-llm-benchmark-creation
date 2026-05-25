@@ -1,4 +1,3 @@
-
 sig Node {}
 
 sig HeapState {
@@ -18,7 +17,6 @@ pred clearMarks[hs, hs" : HeapState] {
   hs".right = hs.right
 }
 
-
 fun reachable[hs: HeapState, n: Node] : set Node {
   n + n.^(hs.left + hs.right)
 }
@@ -28,7 +26,6 @@ pred mark[hs: HeapState, from : Node, hs": HeapState] {
   hs".left = hs.left
   hs".right = hs.right
 }
-
 
 pred setFreeList[hs, hs": HeapState] {
   

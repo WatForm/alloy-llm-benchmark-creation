@@ -1,5 +1,3 @@
-
-
 abstract sig Object {}
 
 sig Name {}
@@ -27,9 +25,6 @@ sig DirEntry {
   one this.~entries
 }
 
-
 fact OneParent_correctVersion {
     all d: Dir - Root | (one d.parent && one contents.d)
 }
-
-

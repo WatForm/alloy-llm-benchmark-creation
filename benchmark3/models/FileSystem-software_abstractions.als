@@ -16,5 +16,3 @@ fact{
 	
 	all a: Alias | not a in a.^to
 	}
-
-
