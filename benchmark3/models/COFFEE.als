@@ -15,7 +15,6 @@ sig ThermalThing extends Thing {}
 one sig Substance, Cup extends ThermalThing {}
 one sig Coffee extends Substance {}
 
-
 abstract sig Process {
 	increases: one HEAT,
 	decreases: one HEAT
@@ -26,7 +25,6 @@ one sig HeatFlow extends Process {}
 
 sig HEAT extends ThermalProperty{
 	greaterThan: lone HEAT
-	
 }
 
 sig ThermalProperty extends Property {}
@@ -42,7 +40,6 @@ fact {
 
 	hasProperty = Coffee -> (TEMPERATURE_OF_COFFEE + HEAT_OF_COFFEE) + Cup -> (TEMPERATURE_OF_CUP + HEAT_OF_CUP)
 	influences = HEAT_OF_COFFEE -> TEMPERATURE_OF_COFFEE + HEAT_OF_CUP -> TEMPERATURE_OF_CUP
-
 
 	all t:ThermalThing | t.touches != Cup && t.touches != Coffee => no greaterThan && no HeatFlow
  	all t:ThermalThing | t.touches = Cup || t.touches = Coffee <=> greaterThan = HEAT_OF_COFFEE -> HEAT_OF_CUP || greaterThan = HEAT_OF_CUP -> HEAT_OF_COFFEE || greaterThan != (HEAT_OF_CUP -> HEAT_OF_COFFEE + HEAT_OF_COFFEE -> HEAT_OF_CUP)

@@ -12,7 +12,3 @@ fact {all b:Book | all n:b.entry | lone b.listed[n] }
 fact { all b:Book | all n,l:Name | l in lookup[b,n] implies l in b.entry }
 
 fact { all b:Book | all n:b.entry | not n in lookup[b,n] }
-
-
-
-
