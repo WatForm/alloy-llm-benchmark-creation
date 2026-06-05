@@ -6,7 +6,6 @@ sig Phone {
 	forward: lone Phone
 }
 
-
 fact ConnectsRequestsC {
 	// all connections have matching requests (potentially forwarded)
 	let noForward = {x : Phone | no x.forward} |

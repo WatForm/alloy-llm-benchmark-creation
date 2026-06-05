@@ -11,4 +11,3 @@ fact NotClosed {
 		all s2: Set |
 			s2.elements != s0.elements + s1.elements
 }
-
