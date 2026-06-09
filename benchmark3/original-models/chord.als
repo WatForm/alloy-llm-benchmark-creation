@@ -1,3 +1,4 @@
+// from: https://github.com/AlloyTools/models/blob/master/algorithms/distributed-hashtable/chord.als
 /*
  * Models the chord distributed hash table lookup protocol.
  *

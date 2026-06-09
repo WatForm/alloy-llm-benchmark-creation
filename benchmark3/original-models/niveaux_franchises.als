@@ -1,3 +1,4 @@
+// from: https://github.com/cturle/alloy/blob/master/gvc/catalogue%20produit/niveaux_franchises.als
 -- niveaux de franchise
 
 open util/ternary

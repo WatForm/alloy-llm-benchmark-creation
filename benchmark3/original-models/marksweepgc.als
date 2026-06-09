@@ -1,3 +1,4 @@
+// from: https://github.com/AlloyTools/models/blob/master/algorithms/gc/marksweepgc.als
 /*
  * Model of mark and sweep garbage collection.
  */

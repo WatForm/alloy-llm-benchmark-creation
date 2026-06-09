@@ -1,3 +1,4 @@
+// from: https://github.com/elkel53930/software_abstructions/blob/master/chA/A.1/sibling.als
 sig Father {}
 sig Mother {}
 

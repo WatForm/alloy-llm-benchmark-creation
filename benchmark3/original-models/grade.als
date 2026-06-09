@@ -1,3 +1,4 @@
+// from: https://github.com/kaiyuanw/MuAlloy/blob/master/experiments/models/grade.als
 /*   Dan Dougherty, 12/16
 
 Alloy gradebook spec, with some names changed:

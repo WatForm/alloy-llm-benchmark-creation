@@ -1,3 +1,4 @@
+// from: https://github.com/elkel53930/software_abstructions/blob/master/FileSystem.als
 abstract sig Object {}
 sig Directory extends Object {contents: set Object}
 one sig Root extends Directory {}

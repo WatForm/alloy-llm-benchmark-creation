@@ -1,3 +1,4 @@
+// from: https://github.com/Allisonius/AlloyModelsForEvaluations/blob/main/Alloy%20Models/Smaller%20Models/Puzzles/phones_c.als
 module homework/phones
 
 sig Phone {

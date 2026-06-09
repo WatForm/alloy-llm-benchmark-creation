@@ -1,3 +1,4 @@
+// from: https://github.com/AlloyTools/models/blob/master/software-abstractions-book/chapter5/sets1.als
 module chapter5/sets1 ----- page 156
 
 sig Set {

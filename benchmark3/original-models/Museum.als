@@ -1,3 +1,4 @@
+// from: https://github.com/manzala/Alloy/blob/master/Museum.als
 /**
  * The pictures in a museum.
  */

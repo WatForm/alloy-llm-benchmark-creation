@@ -1,3 +1,4 @@
+// from: https://github.com/elkel53930/software_abstructions/blob/master/training/learning_alloy_by_sample/Puzzle.als
 abstract sig Event {}
 one sig GraduationCeremony extends Event{}
 one sig TravelingAbroad extends Event{}

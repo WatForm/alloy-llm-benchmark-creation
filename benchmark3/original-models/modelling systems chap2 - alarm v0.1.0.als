@@ -1,3 +1,4 @@
+// from: https://github.com/cturle/alloy/blob/master/modelling%20systems%20chap2%20-%20alarm%20v0.1.0.als
 sig Condition
 {
 }

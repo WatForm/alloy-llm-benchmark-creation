@@ -1,3 +1,4 @@
+// from: https://github.com/nmacedo/MSV/blob/master/CaseStudies/Alloy4Fun/alloy4fun_SPL_1_2_3_4.als
 module alloy4fun
 
 /* 

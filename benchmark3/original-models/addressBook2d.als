@@ -1,3 +1,4 @@
+// from: https://github.com/AlloyTools/models/blob/master/software-abstractions-book/chapter2/addressBook2d.als
 module tour/addressBook2d ----- Page 21
 
 abstract sig Target { }

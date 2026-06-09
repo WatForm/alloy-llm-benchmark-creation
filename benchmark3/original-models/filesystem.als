@@ -1,3 +1,4 @@
+// from: https://github.com/AlloyTools/models/blob/master/software-abstractions-book/chapter4/filesystem.als
 module chapter4/filesystem ----- The model from page 125
 
 abstract sig Object {}

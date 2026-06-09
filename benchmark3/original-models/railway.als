@@ -1,3 +1,4 @@
+// from: https://github.com/AlloyTools/models/blob/master/models/transport/railway.als
 
 /*
  * A simple model of a railway system. Trains sit on segments of tracks

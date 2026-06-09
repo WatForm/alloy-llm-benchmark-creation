@@ -1,3 +1,4 @@
+// from: https://github.com/cturle/alloy/blob/master/framework/all_isas.als
 -- all_isas relation from isa relation
 
 open util/relation

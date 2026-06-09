@@ -1,3 +1,4 @@
+// from: https://github.com/kaiyuanw/MuAlloy/blob/master/experiments/models/ctree.als
 /*
     From section 2 of paper
     Colored, undirected trees

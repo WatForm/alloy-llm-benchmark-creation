@@ -1,3 +1,4 @@
+// from: https://github.com/cturle/alloy/blob/master/no_transitivity_redundancy.als
 open util/relation
 
 sig N { suivant: set N }

@@ -1,3 +1,4 @@
+// from: https://github.com/BrettKriz/Alloy/blob/master/Past/fruitbowl.als
 // FRUIT BOWL
 // Brett Kriz
 abstract sig Fruit{}

@@ -1,3 +1,4 @@
+// from: https://github.com/elkel53930/software_abstructions/blob/master/ch04/4.3.3/ex_Arity.als
 sig A {r : B->C}
 sig B {}
 sig C {}

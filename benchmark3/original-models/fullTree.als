@@ -1,3 +1,4 @@
+// from: https://github.com/kaiyuanw/MuAlloy/blob/master/experiments/models/fullTree.als
 module FullTree
 
 sig Node {

@@ -1,3 +1,4 @@
+// from: https://github.com/Allisonius/AlloyModelsForEvaluations/blob/main/Alloy%20Models/Benchmarks/Amaglam%20Benchmark/addr.als
 /* Specification */
 // types (only relations, sigs/universe, preds assumed fix)
 abstract sig Listing { }

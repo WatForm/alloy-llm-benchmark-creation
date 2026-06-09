@@ -1,3 +1,4 @@
+// from: https://github.com/kaiyuanw/MuAlloy/blob/master/experiments/models/handshake.als
 module handshake
 
 sig Person {spouse: Person, shaken: set Person}

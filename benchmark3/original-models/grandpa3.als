@@ -1,3 +1,4 @@
+// from: https://github.com/AlloyTools/models/blob/master/software-abstractions-book/chapter4/grandpa3.als
 module language/grandpa3 ---- the final model in fig 4.4
 
 abstract sig Person {

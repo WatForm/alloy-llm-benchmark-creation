@@ -1,3 +1,4 @@
+// from: https://github.com/cturle/alloy/blob/master/gvc/Avenant.als
 -- avenant
 
 -- Domain

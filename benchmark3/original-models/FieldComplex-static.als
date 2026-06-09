@@ -1,3 +1,4 @@
+// from: https://github.com/manzala/Alloy/blob/master/FieldComplex-static.als
 sig Field {
 }
 

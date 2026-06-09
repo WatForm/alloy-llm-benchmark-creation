@@ -1,3 +1,4 @@
+// from: https://github.com/elkel53930/software_abstructions/blob/master/ch04/4.5.1/ex_Host.als
 /*
 sig Host {}
 sig Link {from, to: Host}

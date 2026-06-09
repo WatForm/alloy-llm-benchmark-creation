@@ -11,7 +11,3 @@ sig File extends Object {}
 fact {
 	Object in Root.*contents
 	}
-
-
-
-

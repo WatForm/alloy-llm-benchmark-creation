@@ -1,3 +1,4 @@
+// from: https://github.com/kaiyuanw/MuAlloy/blob/master/experiments/models/singlyLinkedList.als
 module SinglyLinkedList
 
 sig List {

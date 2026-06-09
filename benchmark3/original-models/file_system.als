@@ -1,3 +1,4 @@
+// from: https://github.com/AlloyTools/models/blob/master/models/file-system/file_system.als
 
 /*
  * Model of a generic file system.

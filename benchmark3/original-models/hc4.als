@@ -1,3 +1,4 @@
+// from: https://github.com/atdyer/alloy/blob/master/hc-atd/hc4.als
 module hc4	-- version 0.04
 
 -- New way of describing connectivity that will allow
