@@ -31,9 +31,6 @@ Every "Command" is the "command" of exactly one "StoredModel".
 
 Every "StoredModel has no "public" value if and only if it has some "command".
 
->>> Pick one of the following two sentences:
->>> The second I think?
-A pair in "model" links an "Instance" with a set of "StoredModels" if and only if the "Command" that is the "instanceOf" the "Instance" is the "command" linked with the "StoredModel".
 For every "Instance", its "model" set is exactly the set of "StoredModel"s whose "command" value is that "Instance"s "instanceOf" value.
 
 Every "Command" has at most one "Instance" that is the "instanceOf" of that "Command".
