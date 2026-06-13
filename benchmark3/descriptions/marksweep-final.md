@@ -5,9 +5,6 @@ Each "HeapState" is connected to set of "Nodes" in the relation "marked".
 
 
 Each "HeapState" matches to at most one "Node" by the relation "freeList".
->> use of the word "relation"
-> we don't understand this comment
->> I think I meant to say the word "relation" was not allowed, but since it is allowed, the original comment can be ignored
 
 There are two subsets of "HeapState", named "h" and "hn".
 
@@ -15,10 +12,6 @@ There is exactly one distinguished element named "root".
 
 A condition named clearMarks relates two elements of "HeapState"s, called the before-state and after-state.  This condition 
 ensures there are no nodes in the "marked" set of the second "HeapState" and that "left" and "right" fields of the two "HeapState"s are the same.
->> Do facts need to be named? "clearMarks"
-> the predicate is "clearMarks" in the .als and it is not in quotes
-> here so it is not required to be used in the model by the LLM
->> Agreed
 
 A derived set named reachable is determined from a "HeapState" and a starting "Node". It is the set containing the starting node together with every "Node" reachable from that starting node by following zero or more steps, where each step may use either the "left" relation or the "right" relation of that "HeapState".
 

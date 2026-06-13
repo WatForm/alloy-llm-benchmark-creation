@@ -17,3 +17,6 @@ For every "Joint":
 
 For every element of "Vertex", every other element of "Vertex" is reachable from it by a nonempty path consisting only of repeated "left" steps and/or repeated "right" steps. This means that for any chosen element of "Vertex", all elements of "Vertex" except that element itself belong to the set of elements reachable from it by repeatedly following "left" or repeatedly following "right".
 >>> restating the same thing twice
+
+
+>>> Final version seen, no additional comments
