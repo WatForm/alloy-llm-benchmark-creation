@@ -17,5 +17,6 @@ All "State"s can solve all alarms, meaning the "current_alarm"s of the state are
 No "Expert" is in both a state's "called_experts" and the state's "onsite_experts".
 
 >> possible rewrite using "disjoint"?
+> we decided to leave it as is
 
 No expert in a state's "called_expert"s is unnecessary for solving that state's "current_alarms", meaning if you remove a "called_expert" of a state, it can no longer solve all alarms.

@@ -1,21 +1,22 @@
 There is a set of atoms called "Node".
 
 There is a set of atoms called "HeapState". Each "HeapState" is connected to at most one "Node" in a relation called "left". Each "HeapState" is connected to at most one "Node" in a relation called "right".
-Each "HeapState" is connected to set of "Nodes" called in the relation "marked".
->>> remove "called"?
+Each "HeapState" is connected to set of "Nodes" in the relation "marked".
+
+
 Each "HeapState" matches to at most one "Node" by the relation "freeList".
 >> use of the word "relation"
+> we don't understand this comment
 
-There are two subsets of "HeapState", named "h" and "h"".
->>> weird to parse "h""
->> agreed, I had trouble understanding this. maybe h''?
+There are two subsets of "HeapState", named "h" and "hn".
 
-There is exactly one distinguished element named "root", and it is the only member of "Node".
->>> can there not be more nodes than root?
+There is exactly one distinguished element named "root".
 
 A condition named clearMarks relates two elements of "HeapState"s, called the before-state and after-state.  This condition 
 ensures there are no nodes in the "marked" set of the second "HeapState" and that "left" and "right" fields of the two "HeapState"s are the same.
 >> Do facts need to be named? "clearMarks"
+> the predicate is "clearMarks" in the .als and it is not in quotes
+> here so it is not required to be used in the model by the LLM
 
 A derived set named reachable is determined from a "HeapState" and a starting "Node". It is the set containing the starting node together with every "Node" reachable from that starting node by following zero or more steps, where each step may use either the "left" relation or the "right" relation of that "HeapState".
 
@@ -35,4 +36,4 @@ A condition named setFreeList relates a before-state and an after-state, with al
   - its "right" successor in the after-state is exactly the same as in the before-state;
 - the marked set of the after-state is exactly the same as the marked set of the before-state.
 
-For "h" and "h""  and "root", there must be two "HeapState"s such that "h" and the first "HeapState" satisfy the clearMarks condition and the first "HeapState" and "root" and the second "HeapState" satisfy the mark condition and the second "HeapState" and "h"" satisfy the setFreeList condition.
+For "h" and "hn"  and "root", there must be two "HeapState"s such that "h" and the first "HeapState" satisfy the clearMarks condition and the first "HeapState" and "root" and the second "HeapState" satisfy the mark condition and the second "HeapState" and "hn" satisfy the setFreeList condition.

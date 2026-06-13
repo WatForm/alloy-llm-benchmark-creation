@@ -6,47 +6,47 @@ sig HeapState {
   freeList : lone Node
 }
 
-one sig h, h" in HeapState {}
+one sig h, h in HeapState {}
 one sig root extends Node {}
 
-pred clearMarks[hs, hs" : HeapState] {
+pred clearMarks[hs, hsn : HeapState] {
   
-  no hs".marked
+  no hsn.marked
   
-  hs".left = hs.left
-  hs".right = hs.right
+  hsn.left = hs.left
+  hsn.right = hs.right
 }
 
 fun reachable[hs: HeapState, n: Node] : set Node {
   n + n.^(hs.left + hs.right)
 }
 
-pred mark[hs: HeapState, from : Node, hs": HeapState] {
-  hs".marked = hs.reachable[from]
-  hs".left = hs.left
-  hs".right = hs.right
+pred mark[hs: HeapState, from : Node, hsn: HeapState] {
+  hsn.marked = hs.reachable[from]
+  hsn.left = hs.left
+  hsn.right = hs.right
 }
 
-pred setFreeList[hs, hs": HeapState] {
+pred setFreeList[hs, hsn: HeapState] {
   
-  hs".freeList.*(hs".left) in (Node - hs.marked)
+  hsn.freeList.*(hsn.left) in (Node - hs.marked)
   all n: Node |
     (n !in hs.marked) => {
-      no hs".right[n]
-      hs".left[n] in (hs".freeList.*(hs".left))
-      n in hs".freeList.*(hs".left)
+      no hsn.right[n]
+      hsn.left[n] in (hsn.freeList.*(hsn.left))
+      n in hsn.freeList.*(hsn.left)
     } else {
-      hs".left[n] = hs.left[n]
-      hs".right[n] = hs.right[n]
+      hsn.left[n] = hs.left[n]
+      hsn.right[n] = hs.right[n]
     }
-  hs".marked = hs.marked
+  hsn.marked = hs.marked
 }
 
-pred GC[hs: HeapState, root : Node, hs": HeapState] {
+pred GC[hs: HeapState, root : Node, hsn: HeapState] {
   some hs1, hs2: HeapState |
-    hs.clearMarks[hs1] && hs1.mark[root, hs2] && hs2.setFreeList[hs"]
+    hs.clearMarks[hs1] && hs1.mark[root, hs2] && hs2.setFreeList[hsn]
 }
 
 fact GCHappened{
-  GC[h,root, h"]
+  GC[h,root, h]
 }
