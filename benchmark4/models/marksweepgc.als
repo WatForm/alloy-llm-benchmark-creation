@@ -6,7 +6,7 @@ sig HeapState {
   freeList : lone Node
 }
 
-one sig h, h in HeapState {}
+one sig h, hsn in HeapState {}
 one sig root extends Node {}
 
 pred clearMarks[hs, hsn : HeapState] {
@@ -48,5 +48,5 @@ pred GC[hs: HeapState, root : Node, hsn: HeapState] {
 }
 
 fact GCHappened{
-  GC[h,root, h]
+  GC[h,root, hsn]
 }
