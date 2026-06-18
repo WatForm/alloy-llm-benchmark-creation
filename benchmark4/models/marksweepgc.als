@@ -53,4 +53,3 @@ fact GCHappened{
   GC[h,root, hsn]
 }
 
-run {} for 3
