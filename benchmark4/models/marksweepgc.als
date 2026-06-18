@@ -31,14 +31,16 @@ pred setFreeList[hs, hsn: HeapState] {
   
   hsn.freeList.*(hsn.left) in (Node - hs.marked)
   all n: Node |
-    (n !in hs.marked) => {
-      no hsn.right[n]
-      hsn.left[n] in (hsn.freeList.*(hsn.left))
-      n in hsn.freeList.*(hsn.left)
-    } else {
-      hsn.left[n] = hs.left[n]
-      hsn.right[n] = hs.right[n]
-    }
+  (n !in hs.marked) =>
+    ( no hsn.right[n]
+      && hsn.left[n] in (hsn.freeList.*(hsn.left))
+      && n in hsn.freeList.*(hsn.left)
+    )
+  &&
+  (n in hs.marked) =>
+    ( hsn.left[n] = hs.left[n]
+      && hsn.right[n] = hs.right[n]
+    )
   hsn.marked = hs.marked
 }
 
@@ -50,3 +52,5 @@ pred GC[hs: HeapState, root : Node, hsn: HeapState] {
 fact GCHappened{
   GC[h,root, hsn]
 }
+
+run {} for 3
