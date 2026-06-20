@@ -6,7 +6,7 @@ Each "HeapState" is connected to set of "Nodes" in the relation "marked".
 
 Each "HeapState" matches to at most one "Node" by the relation "freeList".
 
-There are two subsets of "HeapState", named "h" and "hn".
+There are two subsets of "HeapState", named "h" and "hsn".
 
 There is exactly one distinguished element named "root".
 
@@ -31,4 +31,4 @@ A condition named setFreeList relates a before-state and an after-state, with al
   - its "right" successor in the after-state is exactly the same as in the before-state;
 - the marked set of the after-state is exactly the same as the marked set of the before-state.
 
-For "h" and "hn"  and "root", there must be two "HeapState"s such that "h" and the first "HeapState" satisfy the clearMarks condition and the first "HeapState" and "root" and the second "HeapState" satisfy the mark condition and the second "HeapState" and "hn" satisfy the setFreeList condition.
+For "h" and "hsn"  and "root", there must be two "HeapState"s such that "h" and the first "HeapState" satisfy the clearMarks condition and the first "HeapState" and "root" and the second "HeapState" satisfy the mark condition and the second "HeapState" and "hsn" satisfy the setFreeList condition.
