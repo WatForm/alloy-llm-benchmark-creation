@@ -1,11 +1,11 @@
 There are four disjoint kinds of elements: "StoredModel", "Link", "Command", and "Instance".
 
-The "derivationOf" a "StoredModel" is one or no "StoreModel".
+The "derivationOf" a "StoredModel" is one or no "StoredModel".
 Each "StoredModel" is associated with one or no "public" "Link".
 Each "StoredModel" is associated with one or no "secret" "Link".
 Each "StoredModel" is associated with one or no "Command", called its "command".
 
-"Secret" is a subset of StoredModel.
+"Secret" is a subset of "StoredModel".
 
 Each "Instance" is associated with exactly one "instanceOf" value, which is a "Command".
 Each "Instance" is associated with a set of "StoredModel"s, called its "model".
@@ -30,7 +30,7 @@ If a "Secret" has a "public" value and no "secret" value, then there is no "Stor
 
 Every "Command" is the "command" of exactly one "StoredModel".
 
-Every "StoredModel has no "public" value if and only if it has some "command".
+Every "StoredModel" has no "public" value if and only if it has some "command".
 
 For every "Instance", its "model" set is exactly the set of "StoredModel"s whose "command" value is the "instanceOf" value of the "Instance".
 

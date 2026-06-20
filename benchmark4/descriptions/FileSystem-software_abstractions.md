@@ -11,7 +11,7 @@ Each "Alias" is related by "to" to exactly one "Object".
 
 The "Root" is not in the "contents" of any "Directory".
 
-The "Root" can reach every Object except itself through iterating the "content"s relation.
+The "Root" can reach every Object except itself through iterating the "contents" relation.
 
 "contents" is acyclic.
 
