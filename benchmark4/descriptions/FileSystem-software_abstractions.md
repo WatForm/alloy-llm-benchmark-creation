@@ -1,7 +1,9 @@
 There is a set called "Object".
 
-The sets "Directory", "File", and "Alias" are non-overlapping subsets of "Object".
-Every element of "Object" is in at least one of its extending sets.
+The sets "Directory" and "File" are non-overlapping subsets of "Object".
+Every element of "Object" is in at least one of these sets.
+
+"Alias" is a subset of "File".
 
 There is one distinguished single element named "Root", which is a Directory.
 

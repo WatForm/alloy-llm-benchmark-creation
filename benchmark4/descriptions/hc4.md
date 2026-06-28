@@ -11,4 +11,4 @@ For every "Joint":
 - following "right" and then "left" returns to that same element, and
 - its "left" value and its "right" value are different.
 
-For every element of "Vertex", every other element of "Vertex" is reachable from it by a nonempty path consisting only of repeated "left" steps and/or repeated "right" steps. 
+For every element of "Vertex", the other elements of "Vertex" are exactly those reachable from it either by a nonempty path of only repeated "left" steps or by a nonempty path of only repeated "right" steps; an element is not reachable from itself. 

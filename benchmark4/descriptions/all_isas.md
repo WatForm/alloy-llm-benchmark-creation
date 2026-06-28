@@ -2,7 +2,7 @@ There are two disjoint sets of elements, named "E" and "C".
 
 Each element of "C" is related by "genls" to zero or more elements of "C".
 
-The inverse of "genls" forms a tree, meaning it is a directed acyclic graph with one root.
+The inverse of "genls" forms a directed acyclic graph in which every node has at most one parent and there is at most one root.
 
 Each element of "E" is related by "isas" to one or more elements of "C", meaning the element of "E" is a "C".
 

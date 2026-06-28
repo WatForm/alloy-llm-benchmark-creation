@@ -12,7 +12,7 @@ Each "Instance" is associated with a set of "StoredModel"s, called its "model".
 Each "Instance" is associated with exactly one "Link", called its "link".
 
 
-Every "Link" is exactly one of 1) the "public" value of some "StoredModel", 2) the "secret" value of some "StoredModel", or 3) the "link" of some "Instance".
+Every "Link" has exactly one owner across the "public", "secret", and "link" relations combined: it is the "public" value of exactly one "StoredModel", or the "secret" value of exactly one "StoredModel", or the "link" of exactly one "Instance", and exactly one of these holds.
 
 Every "StoredModel" that has a "secret" "Link" is a "Secret".
 
@@ -24,7 +24,7 @@ No "StoredModel" is reachable from itself by following "derivationOf" one or mor
 
 Every "StoredModel" that has no "public" "Link" is the "derivationOf" at most one "StoredModel".
 
-Every "StoredModel" that can be reached by one or more steps of the "derivationOf" of a "Secret" is also a "Secret".
+Every "StoredModel" that can reach a "Secret" by following one or more "derivationOf" steps is also a "Secret".
 
 If a "Secret" has a "public" value and no "secret" value, then there is no "StoredModel" that can reach it by following "derivationOf" zero or more times that has a "secret" value.
 

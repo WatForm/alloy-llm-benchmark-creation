@@ -8,6 +8,6 @@ Each "Node" has at most one incoming "left"-or-"right" relation from other "Node
 
 Every "Node"'s "left" set is disjoint from its "right" set.
 
-The "left" and "right" relations together form a perfect tree.
+The "left" and "right" relations together form a forest of perfect binary trees.
 
 For every "Node", the number of "Node"s reachable from it by zero or more "left" steps is equal to the number of "Node"s reachable from it by zero or more "right" steps. 
