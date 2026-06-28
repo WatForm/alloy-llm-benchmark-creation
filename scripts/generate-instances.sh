@@ -3,7 +3,7 @@
 # Generate Alloy instances using CompoSAT with incrementing scope.
 #
 # Creates a temp copy of the .als file with all existing run/check commands
-# stripped, appends "run {} for x" (x = 1, 2, 3, ...), and runs CompoSAT
+# stripped, appends "run {} for x but 4 int" (x = 1, 2, 3, ...), and runs CompoSAT
 # on each scope until a time limit is reached.
 #
 # Usage:
@@ -92,9 +92,9 @@ process_single_file() {
 
         # Update the temp file: remove any previous generated run line, append new one.
         local REWRITE_FILE="$TEMP_DIR/rewrite_${SCOPE}.als"
-        sed -E '/^run \{\} for [0-9]+$/d' "$TEMP_FILE" > "$REWRITE_FILE"
+        sed -E '/^run \{\} for [0-9]+( but 4 int)?$/d' "$TEMP_FILE" > "$REWRITE_FILE"
         mv "$REWRITE_FILE" "$TEMP_FILE"
-        echo "run {} for $SCOPE" >> "$TEMP_FILE"
+        echo "run {} for $SCOPE but 4 int" >> "$TEMP_FILE"
 
         echo "[$MODEL_REL_PATH] Scope $SCOPE (${ELAPSED}s elapsed, ${REMAINING}s remaining)"
 
