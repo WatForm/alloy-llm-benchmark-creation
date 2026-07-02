@@ -20,6 +20,7 @@ There are exactly one "HEAT_OF_COFFEE" and exactly one "HEAT_OF_CUP", and each o
 Every "Process" is associated with exactly one "increases" "HEAT" and with exactly one "decreases" "HEAT".
 
 There is exactly one "HeatFlow", and it is a "Process".  There are no other elements in "HeatFlow".
+There are no "Process"es that aren't in "HeatFlow".
 
 Every "HEAT" has a "greaterThan" relation to at most one "HEAT".
 
