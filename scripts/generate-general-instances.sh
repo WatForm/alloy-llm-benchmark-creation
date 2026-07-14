@@ -5,7 +5,7 @@
 # Defaults:
 #   models dir:  ./benchmark/models
 #   output dir:  ./benchmark/generalInstances
-#   x:           10 random instances per scope (max)
+#   x:           10 unique instances per scope (max)
 #   y:           5 max scope
 #   timeout:     45 seconds per model/scope run
 #
@@ -24,20 +24,25 @@ OUTPUT_DIR="${2:-$REPO_ROOT/benchmark/generalInstances}"
 MAX_RANDOM_PER_SCOPE="${3:-10}"
 MAX_SCOPE="${4:-5}"
 TIMEOUT_SECONDS="${5:-45}"
-# Generate more than x candidates before random sampling down to x.
-CANDIDATE_MULTIPLIER="${CANDIDATE_MULTIPLIER:-3}"
+PYTHON_BIN="${PYTHON:-python3}"
+MAX_CANDIDATE_MULTIPLIER=10
+
+# Keep model-relative output paths stable whether callers pass "models" or "models/".
+MODELS_DIR="${MODELS_DIR%/}"
+OUTPUT_DIR="${OUTPUT_DIR%/}"
 
 DEFAULT_ALLOY_JAR="$REPO_ROOT/validModels/jars/org.alloytools.alloy.dist-6.2.0.jar"
 ALLOY_DIST_JAR="${ALLOY_DIST_JAR:-$DEFAULT_ALLOY_JAR}"
 
 INSTANCE_GENERATOR_JAVA="$SCRIPT_DIR/InstanceGenerator.java"
 INSTANCE_GENERATOR_CLASS="$SCRIPT_DIR/InstanceGenerator.class"
+INSTANCE_DEDUP="$SCRIPT_DIR/instance_dedup.py"
 
 usage() {
     echo "Usage: $0 [models-dir] [output-dir] [x] [y] [timeout-seconds]"
     echo "  models-dir       Directory of .als files (default: ./benchmark/models)"
-    echo "  output-dir       Directory for sampled xml outputs (default: ./benchmark/generalInstances)"
-    echo "  x                Max random instances kept per scope (default: 10)"
+    echo "  output-dir       Directory for unique xml outputs (default: ./benchmark/generalInstances)"
+    echo "  x                Max unique instances kept per scope (default: 10)"
     echo "  y                Max scope, runs 1..y (default: 5)"
     echo "  timeout-seconds  Timeout per model/scope run (default: 45)"
 }
@@ -76,26 +81,6 @@ run_with_timeout() {
     return $?
 }
 
-choose_random_subset() {
-    local max_keep="$1"
-    shift
-
-    local files=("$@")
-    local count="${#files[@]}"
-
-    if [ "$count" -le "$max_keep" ]; then
-        printf '%s\n' "${files[@]}"
-        return 0
-    fi
-
-    # Portable randomization without depending on shuf.
-    printf '%s\n' "${files[@]}" \
-        | awk 'BEGIN { srand(); } { printf "%.12f\t%s\n", rand(), $0; }' \
-        | sort -k1,1n \
-        | head -n "$max_keep" \
-        | cut -f2-
-}
-
 if [ "${1:-}" = "-h" ] || [ "${1:-}" = "--help" ]; then
     usage
     exit 0
@@ -121,13 +106,6 @@ if ! is_positive_int "$TIMEOUT_SECONDS"; then
     exit 1
 fi
 
-if ! is_positive_int "$CANDIDATE_MULTIPLIER"; then
-    echo "Error: CANDIDATE_MULTIPLIER must be a positive integer: $CANDIDATE_MULTIPLIER"
-    exit 1
-fi
-
-CANDIDATE_LIMIT=$((MAX_RANDOM_PER_SCOPE * CANDIDATE_MULTIPLIER))
-
 if [ ! -f "$ALLOY_DIST_JAR" ]; then
     echo "Error: Alloy distribution jar not found: $ALLOY_DIST_JAR"
     echo "Set ALLOY_DIST_JAR to the jar location, or place it at: $DEFAULT_ALLOY_JAR"
@@ -136,6 +114,11 @@ fi
 
 if [ ! -f "$INSTANCE_GENERATOR_JAVA" ]; then
     echo "Error: missing source file: $INSTANCE_GENERATOR_JAVA"
+    exit 1
+fi
+
+if [ ! -f "$INSTANCE_DEDUP" ]; then
+    echo "Error: missing helper: $INSTANCE_DEDUP"
     exit 1
 fi
 
@@ -165,9 +148,8 @@ fi
 echo "=== Exact-scope general instance generation ==="
 echo "Models dir:        $MODELS_DIR"
 echo "Output dir:        $OUTPUT_DIR"
-echo "x (max kept):      $MAX_RANDOM_PER_SCOPE"
+echo "x (unique kept):   $MAX_RANDOM_PER_SCOPE"
 echo "y (max scope):     $MAX_SCOPE"
-echo "Candidates/scope:  $CANDIDATE_LIMIT"
 echo "Timeout per scope: ${TIMEOUT_SECONDS}s"
 echo "Models found:      $ALS_COUNT"
 echo ""
@@ -189,58 +171,104 @@ while IFS= read -r -d '' MODEL_FILE; do
 
     SCOPE=1
     while [ "$SCOPE" -le "$MAX_SCOPE" ]; do
-        echo "  scope $SCOPE: generating candidates"
+        TARGET_MODEL_DIR="$OUTPUT_DIR/$REL_NO_EXT"
+        TARGET_SCOPE_DIR="$TARGET_MODEL_DIR/scope_$SCOPE"
+        MULTIPLIER=2
+        GEN_COUNT=0
+        KEPT_COUNT=0
+        GENERATION_FAILED=0
+        EXHAUSTED=0
+        SELECTED=()
 
-        run_with_timeout "$TIMEOUT_SECONDS" \
-            "$JAVA17" -cp "$SCRIPT_DIR:$ALLOY_DIST_JAR" InstanceGenerator "$MODEL_FILE" "$SCOPE" "$CANDIDATE_LIMIT"
-        GEN_STATUS=$?
+        while true; do
+            CANDIDATE_LIMIT=$((MAX_RANDOM_PER_SCOPE * MULTIPLIER))
+            echo "  scope $SCOPE: generating up to $CANDIDATE_LIMIT candidates (${MULTIPLIER}x)"
 
-        if [ "$GEN_STATUS" -eq 124 ]; then
-            echo "  scope $SCOPE: timeout after ${TIMEOUT_SECONDS}s"
-            TOTAL_TIMEOUTS=$((TOTAL_TIMEOUTS + 1))
-            # Remove any partial artifacts for this scope in model dir.
+            find "$MODEL_DIR" -maxdepth 1 -type f -name "$MODEL_BASE-instance-$SCOPE-*.xml" -delete 2>/dev/null || true
+
+            run_with_timeout "$TIMEOUT_SECONDS" \
+                "$JAVA17" -cp "$SCRIPT_DIR:$ALLOY_DIST_JAR" InstanceGenerator "$MODEL_FILE" "$SCOPE" "$CANDIDATE_LIMIT"
+            GEN_STATUS=$?
+
+            if [ "$GEN_STATUS" -eq 124 ]; then
+                echo "  scope $SCOPE: timeout after ${TIMEOUT_SECONDS}s"
+                TOTAL_TIMEOUTS=$((TOTAL_TIMEOUTS + 1))
+                GENERATION_FAILED=1
+                break
+            fi
+
+            if [ "$GEN_STATUS" -ne 0 ]; then
+                echo "  scope $SCOPE: generator failed (exit $GEN_STATUS)"
+                TOTAL_ERRORS=$((TOTAL_ERRORS + 1))
+                GENERATION_FAILED=1
+                break
+            fi
+
+            GENERATED_FILES=()
+            while IFS= read -r -d '' XML_FILE; do
+                GENERATED_FILES+=("$XML_FILE")
+            done < <(find "$MODEL_DIR" -maxdepth 1 -type f -name "$MODEL_BASE-instance-$SCOPE-*.xml" -print0)
+
+            GEN_COUNT="${#GENERATED_FILES[@]}"
+            if [ "$GEN_COUNT" -eq 0 ]; then
+                echo "  scope $SCOPE: no satisfiable instance"
+                TOTAL_EMPTY=$((TOTAL_EMPTY + 1))
+                break
+            fi
+
+            SELECTED=()
+            while IFS= read -r CHOSEN; do
+                [ -n "$CHOSEN" ] && SELECTED+=("$CHOSEN")
+            done < <("$PYTHON_BIN" "$INSTANCE_DEDUP" select \
+                --limit "$MAX_RANDOM_PER_SCOPE" \
+                --prior-root "$TARGET_MODEL_DIR" \
+                --current-scope "$SCOPE" \
+                -- "${GENERATED_FILES[@]}")
+
+            KEPT_COUNT="${#SELECTED[@]}"
+            if [ "$KEPT_COUNT" -ge "$MAX_RANDOM_PER_SCOPE" ]; then
+                break
+            fi
+
+            if [ "$GEN_COUNT" -lt "$CANDIDATE_LIMIT" ]; then
+                EXHAUSTED=1
+                break
+            fi
+
+            if [ "$MULTIPLIER" -ge "$MAX_CANDIDATE_MULTIPLIER" ]; then
+                EXHAUSTED=1
+                echo "  scope $SCOPE: found $KEPT_COUNT unique new candidate(s); stopping at ${MAX_CANDIDATE_MULTIPLIER}x candidate limit"
+                break
+            fi
+
+            echo "  scope $SCOPE: found $KEPT_COUNT unique new candidate(s); retrying with $((MULTIPLIER + 1))x"
+            MULTIPLIER=$((MULTIPLIER + 1))
+        done
+
+        if [ "$GENERATION_FAILED" -ne 0 ] || [ "$GEN_COUNT" -eq 0 ]; then
             find "$MODEL_DIR" -maxdepth 1 -type f -name "$MODEL_BASE-instance-$SCOPE-*.xml" -delete 2>/dev/null || true
             SCOPE=$((SCOPE + 1))
             continue
         fi
 
-        if [ "$GEN_STATUS" -ne 0 ]; then
-            echo "  scope $SCOPE: generator failed (exit $GEN_STATUS)"
-            TOTAL_ERRORS=$((TOTAL_ERRORS + 1))
-            find "$MODEL_DIR" -maxdepth 1 -type f -name "$MODEL_BASE-instance-$SCOPE-*.xml" -delete 2>/dev/null || true
-            SCOPE=$((SCOPE + 1))
-            continue
-        fi
-
-        GENERATED_FILES=()
-        while IFS= read -r -d '' XML_FILE; do
-            GENERATED_FILES+=("$XML_FILE")
-        done < <(find "$MODEL_DIR" -maxdepth 1 -type f -name "$MODEL_BASE-instance-$SCOPE-*.xml" -print0)
-
-        GEN_COUNT="${#GENERATED_FILES[@]}"
-        if [ "$GEN_COUNT" -eq 0 ]; then
-            echo "  scope $SCOPE: no satisfiable instance"
-            TOTAL_EMPTY=$((TOTAL_EMPTY + 1))
-            SCOPE=$((SCOPE + 1))
-            continue
-        fi
-
-        TARGET_SCOPE_DIR="$OUTPUT_DIR/$REL_NO_EXT/scope_$SCOPE"
+        rm -rf "$TARGET_SCOPE_DIR"
         mkdir -p "$TARGET_SCOPE_DIR"
 
-        SELECTED=()
-        while IFS= read -r CHOSEN; do
-            [ -n "$CHOSEN" ] && SELECTED+=("$CHOSEN")
-        done < <(choose_random_subset "$MAX_RANDOM_PER_SCOPE" "${GENERATED_FILES[@]}")
-
-        KEPT_COUNT="${#SELECTED[@]}"
-        for XML_FILE in "${SELECTED[@]}"; do
-            cp "$XML_FILE" "$TARGET_SCOPE_DIR/"
-        done
+        KEEP_INDEX=1
+        if [ "$KEPT_COUNT" -gt 0 ]; then
+            for XML_FILE in "${SELECTED[@]}"; do
+                cp "$XML_FILE" "$TARGET_SCOPE_DIR/$MODEL_BASE-instance-$SCOPE-$KEEP_INDEX.xml"
+                KEEP_INDEX=$((KEEP_INDEX + 1))
+            done
+        fi
 
         find "$MODEL_DIR" -maxdepth 1 -type f -name "$MODEL_BASE-instance-$SCOPE-*.xml" -delete 2>/dev/null || true
 
-        echo "  scope $SCOPE: kept $KEPT_COUNT/$GEN_COUNT"
+        if [ "$EXHAUSTED" -eq 1 ]; then
+            echo "  scope $SCOPE: kept $KEPT_COUNT unique new instance(s) after exhausting $GEN_COUNT candidate(s)"
+        else
+            echo "  scope $SCOPE: kept $KEPT_COUNT unique new instance(s) from $GEN_COUNT candidate(s)"
+        fi
         MODEL_WRITTEN=$((MODEL_WRITTEN + KEPT_COUNT))
         TOTAL_WRITTEN=$((TOTAL_WRITTEN + KEPT_COUNT))
 
@@ -255,5 +283,4 @@ echo "=== Done ==="
 echo "Total kept xml files: $TOTAL_WRITTEN"
 echo "Timeouts:             $TOTAL_TIMEOUTS"
 echo "Generator errors:     $TOTAL_ERRORS"
-echo "Unsat scopes:         $TOTAL_EMPTY"
 echo "Unsat scopes:         $TOTAL_EMPTY"

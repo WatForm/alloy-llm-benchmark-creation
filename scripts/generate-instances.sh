@@ -19,11 +19,18 @@ COMPOSAT_JAR="$REPO_ROOT/validModels/jars/CompoSAT.jar"
 
 source "$SCRIPT_DIR/java-common.sh"
 
+PYTHON_BIN="${PYTHON:-python3}"
+INSTANCE_DEDUP="$SCRIPT_DIR/instance_dedup.py"
 JAVA8="$(require_java_for_version 8 "CompoSAT")" || exit 1
 COMPOSAT_TMPDIR="$(resolve_alloy_tmpdir)"
 
 if [ ! -f "$COMPOSAT_JAR" ]; then
     echo "Error: CompoSAT jar not found at '$COMPOSAT_JAR'"
+    exit 1
+fi
+
+if [ ! -f "$INSTANCE_DEDUP" ]; then
+    echo "Error: missing helper: $INSTANCE_DEDUP"
     exit 1
 fi
 
@@ -136,11 +143,18 @@ process_single_file() {
             break
         fi
 
-        # Count instances generated for this scope
+        local DEDUP_SUMMARY
+        DEDUP_SUMMARY=$("$PYTHON_BIN" "$INSTANCE_DEDUP" dedup-scope \
+            --prior-root "$OUTPUT_DIR/$MODEL_REL_PATH" \
+            --current-scope "$SCOPE" \
+            --scope-dir "$SCOPE_OUT" \
+            --delete)
+
+        # Count unique instances retained for this scope.
         local SCOPE_INSTANCES
         SCOPE_INSTANCES=$(find "$SCOPE_OUT" -name "*.xml" 2>/dev/null | wc -l | tr -d ' ')
         TOTAL_INSTANCES=$((TOTAL_INSTANCES + SCOPE_INSTANCES))
-        echo "[$MODEL_REL_PATH]   -> $SCOPE_INSTANCES instance(s) at scope $SCOPE"
+        echo "[$MODEL_REL_PATH]   -> $SCOPE_INSTANCES unique instance(s) at scope $SCOPE ($DEDUP_SUMMARY)"
 
         # Clean up empty scope dirs
         if [ "$SCOPE_INSTANCES" -eq 0 ]; then
@@ -176,6 +190,12 @@ INPUT="$1"
 OUTPUT_DIR="$2"
 TIME_LIMIT="${3:-120}"
 MAX_PARALLEL="${4:-4}"
+
+# Keep model-relative output paths stable whether callers pass "models" or "models/".
+if [ -d "$INPUT" ]; then
+    INPUT="${INPUT%/}"
+fi
+OUTPUT_DIR="${OUTPUT_DIR%/}"
 
 if [ ! -e "$INPUT" ]; then
     echo "Error: '$INPUT' not found."
