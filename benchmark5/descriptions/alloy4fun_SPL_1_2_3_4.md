@@ -11,8 +11,7 @@ Each "Instance" is associated with exactly one "instanceOf" value, which is a "C
 Each "Instance" is associated with a set of "StoredModel"s, called its "model".
 Each "Instance" is associated with exactly one "Link", called its "link".
 
-
-Every "Link" has exactly one owner across the "public", "secret", and "link" relations combined: it is the "public" value of exactly one "StoredModel", or the "secret" value of exactly one "StoredModel", or the "link" of exactly one "Instance", and exactly one of these holds.
+Every "Link" has exactly one owner, where an owner is an element related to that "Link" through at least one of the "public", "secret", or "link" relations.
 
 Every "StoredModel" that has a "secret" "Link" is a "Secret".
 
