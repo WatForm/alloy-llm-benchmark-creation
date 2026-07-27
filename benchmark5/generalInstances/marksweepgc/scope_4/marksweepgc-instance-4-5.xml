@@ -32,10 +32,10 @@
    <tuple> <atom label="HeapState$0"/> <atom label="root$0"/> <atom label="Node$1"/> </tuple>
    <tuple> <atom label="HeapState$0"/> <atom label="Node$0"/> <atom label="Node$2"/> </tuple>
    <tuple> <atom label="HeapState$0"/> <atom label="Node$1"/> <atom label="Node$1"/> </tuple>
-   <tuple> <atom label="HeapState$0"/> <atom label="Node$2"/> <atom label="Node$0"/> </tuple>
-   <tuple> <atom label="HeapState$1"/> <atom label="root$0"/> <atom label="Node$2"/> </tuple>
-   <tuple> <atom label="HeapState$1"/> <atom label="Node$0"/> <atom label="Node$1"/> </tuple>
-   <tuple> <atom label="HeapState$1"/> <atom label="Node$1"/> <atom label="Node$2"/> </tuple>
+   <tuple> <atom label="HeapState$0"/> <atom label="Node$2"/> <atom label="Node$1"/> </tuple>
+   <tuple> <atom label="HeapState$1"/> <atom label="root$0"/> <atom label="Node$1"/> </tuple>
+   <tuple> <atom label="HeapState$1"/> <atom label="Node$0"/> <atom label="Node$2"/> </tuple>
+   <tuple> <atom label="HeapState$1"/> <atom label="Node$1"/> <atom label="Node$1"/> </tuple>
    <tuple> <atom label="HeapState$1"/> <atom label="Node$2"/> <atom label="Node$1"/> </tuple>
    <tuple> <atom label="HeapState$2"/> <atom label="root$0"/> <atom label="Node$1"/> </tuple>
    <tuple> <atom label="HeapState$2"/> <atom label="Node$0"/> <atom label="Node$2"/> </tuple>

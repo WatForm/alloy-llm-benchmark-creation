@@ -126,7 +126,6 @@
 </field>
 
 <field label="freeList" ID="10" parentID="6">
-   <tuple> <atom label="HeapState$0"/> <atom label="root$0"/> </tuple>
    <types> <type ID="6"/> <type ID="5"/> </types>
 </field>
 

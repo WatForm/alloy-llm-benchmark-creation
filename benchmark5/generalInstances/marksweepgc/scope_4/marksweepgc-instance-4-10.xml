@@ -37,41 +37,37 @@
    <tuple> <atom label="HeapState$1"/> <atom label="Node$0"/> <atom label="Node$2"/> </tuple>
    <tuple> <atom label="HeapState$1"/> <atom label="Node$1"/> <atom label="Node$1"/> </tuple>
    <tuple> <atom label="HeapState$1"/> <atom label="Node$2"/> <atom label="Node$1"/> </tuple>
-   <tuple> <atom label="HeapState$2"/> <atom label="root$0"/> <atom label="Node$2"/> </tuple>
+   <tuple> <atom label="HeapState$2"/> <atom label="root$0"/> <atom label="Node$1"/> </tuple>
    <tuple> <atom label="HeapState$2"/> <atom label="Node$0"/> <atom label="Node$2"/> </tuple>
-   <tuple> <atom label="HeapState$2"/> <atom label="Node$1"/> <atom label="Node$0"/> </tuple>
-   <tuple> <atom label="HeapState$2"/> <atom label="Node$2"/> <atom label="Node$2"/> </tuple>
-   <tuple> <atom label="HeapState$3"/> <atom label="root$0"/> <atom label="Node$2"/> </tuple>
+   <tuple> <atom label="HeapState$2"/> <atom label="Node$1"/> <atom label="Node$1"/> </tuple>
+   <tuple> <atom label="HeapState$2"/> <atom label="Node$2"/> <atom label="Node$0"/> </tuple>
+   <tuple> <atom label="HeapState$3"/> <atom label="root$0"/> <atom label="Node$1"/> </tuple>
    <tuple> <atom label="HeapState$3"/> <atom label="Node$0"/> <atom label="Node$2"/> </tuple>
-   <tuple> <atom label="HeapState$3"/> <atom label="Node$1"/> <atom label="Node$0"/> </tuple>
-   <tuple> <atom label="HeapState$3"/> <atom label="Node$2"/> <atom label="Node$2"/> </tuple>
+   <tuple> <atom label="HeapState$3"/> <atom label="Node$1"/> <atom label="Node$1"/> </tuple>
+   <tuple> <atom label="HeapState$3"/> <atom label="Node$2"/> <atom label="Node$0"/> </tuple>
    <types> <type ID="6"/> <type ID="5"/> <type ID="5"/> </types>
 </field>
 
 <field label="right" ID="8" parentID="6">
+   <tuple> <atom label="HeapState$0"/> <atom label="root$0"/> <atom label="Node$2"/> </tuple>
    <tuple> <atom label="HeapState$0"/> <atom label="Node$1"/> <atom label="Node$2"/> </tuple>
-   <tuple> <atom label="HeapState$1"/> <atom label="root$0"/> <atom label="root$0"/> </tuple>
-   <tuple> <atom label="HeapState$1"/> <atom label="Node$2"/> <atom label="root$0"/> </tuple>
-   <tuple> <atom label="HeapState$2"/> <atom label="root$0"/> <atom label="Node$0"/> </tuple>
-   <tuple> <atom label="HeapState$3"/> <atom label="root$0"/> <atom label="Node$0"/> </tuple>
    <types> <type ID="6"/> <type ID="5"/> <type ID="5"/> </types>
 </field>
 
 <field label="marked" ID="9" parentID="6">
+   <tuple> <atom label="HeapState$0"/> <atom label="root$0"/> </tuple>
    <tuple> <atom label="HeapState$0"/> <atom label="Node$1"/> </tuple>
-   <tuple> <atom label="HeapState$1"/> <atom label="root$0"/> </tuple>
    <tuple> <atom label="HeapState$1"/> <atom label="Node$0"/> </tuple>
    <tuple> <atom label="HeapState$1"/> <atom label="Node$2"/> </tuple>
    <tuple> <atom label="HeapState$2"/> <atom label="root$0"/> </tuple>
-   <tuple> <atom label="HeapState$2"/> <atom label="Node$0"/> </tuple>
-   <tuple> <atom label="HeapState$2"/> <atom label="Node$2"/> </tuple>
+   <tuple> <atom label="HeapState$2"/> <atom label="Node$1"/> </tuple>
    <types> <type ID="6"/> <type ID="5"/> </types>
 </field>
 
 <field label="freeList" ID="10" parentID="6">
    <tuple> <atom label="HeapState$0"/> <atom label="Node$2"/> </tuple>
    <tuple> <atom label="HeapState$1"/> <atom label="Node$1"/> </tuple>
-   <tuple> <atom label="HeapState$2"/> <atom label="Node$1"/> </tuple>
+   <tuple> <atom label="HeapState$2"/> <atom label="Node$2"/> </tuple>
    <tuple> <atom label="HeapState$3"/> <atom label="Node$1"/> </tuple>
    <types> <type ID="6"/> <type ID="5"/> </types>
 </field>
@@ -85,7 +81,7 @@
 </sig>
 
 <sig label="this/hsn" ID="12" one="yes">
-   <atom label="HeapState$1"/>
+   <atom label="HeapState$2"/>
    <type ID="6"/>
 </sig>
 
